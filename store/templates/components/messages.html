@@ -1,0 +1,110 @@
+{% if messages %}
+    {% for message in messages %}
+    <div class="toast-message alert alert-{{ message.tags }} alert-dismissible fade show position-fixed end-0 me-3 mt-3 shadow-sm" 
+         role="alert" 
+         style="top: 50px; z-index: 1055; min-width: 350px; max-width: 500px;">
+        
+        <!-- Message Content -->
+        <div class="d-flex align-items-center">
+            <div class="flex-grow-1 pe-2">
+                {{ message }}
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="progress mt-2" style="height: 3px; background-color: rgba(255,255,255,0.2);">
+            <div class="progress-bar bg-light" 
+                 role="progressbar" 
+                 style="width: 0%; transition: width 5s linear;"
+                 aria-valuenow="0" 
+                 aria-valuemin="0" 
+                 aria-valuemax="100">
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% endif %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const toasts = document.querySelectorAll('.toast-message');
+    
+    toasts.forEach((toast, index) => {
+        const progressBar = toast.querySelector('.progress-bar');
+        const closeBtn = toast.querySelector('.btn-close');
+        let timeoutId;
+        let isHovered = false;
+        
+        // Start progress bar animation immediately
+        setTimeout(() => {
+            if (progressBar && !isHovered) {
+                progressBar.style.width = '100%';
+            }
+        }, 100);
+        
+        // Auto-close after 5 seconds
+        timeoutId = setTimeout(() => {
+            if (!isHovered) {
+                closeToast(toast);
+            }
+        }, 5000);
+        
+        // Pause on hover
+        toast.addEventListener('mouseenter', function() {
+            isHovered = true;
+            clearTimeout(timeoutId);
+            if (progressBar) {
+                progressBar.style.animationPlayState = 'paused';
+            }
+        });
+        
+        // Resume on mouse leave
+        toast.addEventListener('mouseleave', function() {
+            isHovered = false;
+            const remainingTime = getRemainingTime(progressBar);
+            
+            if (remainingTime > 0) {
+                timeoutId = setTimeout(() => {
+                    closeToast(toast);
+                }, remainingTime);
+                
+                if (progressBar) {
+                    progressBar.style.animationPlayState = 'running';
+                }
+            } else {
+                closeToast(toast);
+            }
+        });
+        
+        // Manual close button
+        closeBtn.addEventListener('click', function() {
+            clearTimeout(timeoutId);
+            closeToast(toast);
+        });
+    });
+    
+    function closeToast(toast) {
+        toast.classList.add('fade-out');
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.remove();
+                repositionToasts();
+            }
+        }, 300);
+    }
+    
+    function getRemainingTime(progressBar) {
+        if (!progressBar) return 0;
+        const currentWidth = parseFloat(progressBar.style.width) || 0;
+        return (100 - currentWidth) / 100 * 5000;
+    }
+    
+    function repositionToasts() {
+        const remainingToasts = document.querySelectorAll('.toast-message');
+        remainingToasts.forEach((toast, index) => {
+            toast.style.top = `${(index + 1) * 80}px`;
+        });
+    }
+});
+</script>
