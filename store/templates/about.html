@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}About Us | UK Based{% endblock %}
+{% block description %}Discover the best Pokémon cards and collectibles at Eevee Emporium. Shop now for rare finds and exclusive deals.{% endblock %}
+{% block keywords %}Pokémon cards, collectibles, Eevee Emporium, rare cards, trading cards, Pokémon shop{% endblock %}
+{% block content %}
+<section class="about-section position-relative overflow-hidden bg-image w-100 bg-image-fill py-10 bg-eevee-cartoon">
+  <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50 -z-1"></div>
+  <div class="container-fluid px-0 mb-5 position-relative">
+      <div class="text-center text-white">
+        <h1 class="display-4 fw-bold">About Eevee Emporium</h1>
+        <p class="lead">Bringing the magic of Eeveelutions to trainers everywhere</p>
+      </div>
+  </div>
+</section>
+
+  <!-- Our Story -->
+  <div class="container mb-5">
+    <div class="row align-items-center">
+      <div class="col-lg-6 mb-4 mb-lg-0">
+        <img src="{% static 'images/backgrounds/storefront.webp' %}" alt="Decorative Image" class="img-fluid rounded shadow">
+      </div>
+      <div class="col-lg-6">
+        <h2 class="mb-4">Our Story</h2>
+        <p>Eevee Emporium began in 2020 with a simple mission: to create a haven for trainers who share our love for the most versatile Pokémon and its evolutions. What started as a small online store run by two passionate collectors has evolved into the premier destination for Eevee enthusiasts.</p>
+        <p>Our founder, Alex, spent years collecting rare Eevee merchandise before deciding to share that passion with the world. From humble beginnings in a small apartment to our current warehouse and flagship store, we've grown while staying true to our values.</p>
+        <p>Today, we pride ourselves on offering the largest selection of Pokemon products anywhere, from official merchandise to exclusive collaborations with artists and designers.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Our Values -->
+  <div class="container-fluid bg-light py-5 mb-5">
+    <div class="container">
+      <h2 class="text-center mb-5">Our Values</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+              <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+                <i class="bi bi-stars text-white fs-1"></i>
+              </div>
+              <h3 class="h4 card-title">Quality</h3>
+              <p class="card-text">Every item in our collection meets rigorous standards for authenticity and craftsmanship, just like a well-trained Eevee.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+              <div class="rounded-circle bg-success d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+                <i class="bi bi-heart-fill text-white fs-1"></i>
+              </div>
+              <h3 class="h4 card-title">Community</h3>
+              <p class="card-text">We foster a welcoming community of collectors and fans, bringing people together through our shared love of Eeveelutions.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+              <div class="rounded-circle bg-info d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+                <i class="bi bi-arrow-repeat text-white fs-1"></i>
+              </div>
+              <h3 class="h4 card-title">Adaptability</h3>
+              <p class="card-text">Like Eevee itself, we continuously evolve our selection and services to meet the changing needs of our customers.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Our Team -->
+  <div class="container mb-5">
+    <h2 class="text-center mb-5">Meet Our Team</h2>
+    <div class="row g-4">
+      <div class="col-lg-3 col-md-6">
+        <div class="card h-100 border-0 shadow-sm">
+          <img src="{% static 'images/people/Alex.jpg' %}" class="card-img-top" alt="Team Member">
+          <div class="card-body text-center">
+            <h5 class="card-title">Alex Johnson</h5>
+            <p class="text-muted">Founder & Flareon Enthusiast</p>
+            <p class="card-text">Alex started collecting Pokémon cards at age 7 and never stopped.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="card h-100 border-0 shadow-sm">
+          <img src="{% static 'images/people/Jamie.jpg' %}" class="card-img-top" alt="Team Member">
+          <div class="card-body text-center">
+            <h5 class="card-title">Jamie Lee</h5>
+            <p class="text-muted">Merchandise Director & Vaporeon Fan</p>
+            <p class="card-text">Jamie scours the world for the rarest and most beautiful Eevee products.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="card h-100 border-0 shadow-sm">
+          <img src="{% static 'images/people/Sam.jpg' %}" class="card-img-top" alt="Team Member">
+          <div class="card-body text-center">
+            <h5 class="card-title">Sam Rivera</h5>
+            <p class="text-muted">Community Manager & Umbreon Lover</p>
+            <p class="card-text">Sam organizes our events and keeps our social media communities thriving.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="card h-100 border-0 shadow-sm">
+          <img src="{% static 'images/people/Taylor.jpg' %}" class="card-img-top" alt="Team Member">
+          <div class="card-body text-center">
+            <h5 class="card-title">Taylor Kim</h5>
+            <p class="text-muted">Customer Experience & Sylveon Enthusiast</p>
+            <p class="card-text">Taylor ensures every customer has a magical experience with us.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Visit Us -->
+  <section class="container-fluid text-white py-5 position-relative overflow-hidden demo-section">
+        <div class="position-absolute top-0 start-0 w-100 h-100">
+            <img src="{% static 'images/backgrounds/store-image.webp' %}" 
+                 class="w-100 h-auto object-cover object-center" 
+                 alt="Eevee Emporium Store">
+        </div>
+        <div class="position-absolute bg-black opacity-75 top-0 start-0 w-100 h-100"></div>
+        <div class="container text-center position-relative z-2">
+            <h2 class="mb-4">Visit Our Flagship Store</h2>
+            <p class="lead mb-4">Come see our collection in person and meet fellow Eevee enthusiasts!</p>
+            <address class="mb-4">
+                <p class="mb-1">123 Pokémon Plaza, Celadon City</p>
+                <p class="mb-1">Open daily: 10am - 8pm</p>
+                <p>Phone: (555) 123-4567</p>
+            </address>
+            <a href="#" class="btn btn-light btn-lg">Contact Us</a>
+        </div>
+    </section>
+{% endblock %}

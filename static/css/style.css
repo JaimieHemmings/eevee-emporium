@@ -1542,12 +1542,26 @@ a.btn-link.text-light:after {
 }
 
 /* Custom Globals */
+.py-5 {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+
+.py-10 {
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
 .opacity-90 {
   opacity: 0.9;
 }
 
 .eevee-bg {
   background-image: url('/static/images/backgrounds/eevee-wallpaper.webp');
+}
+
+.bg-eevee-cartoon {
+  background-image: url('/static/images/backgrounds/eevee-cartoon-bg.webp');
 }
 
 .bg-image-fill {
