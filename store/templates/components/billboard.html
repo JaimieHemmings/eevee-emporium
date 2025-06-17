@@ -1,0 +1,55 @@
+{% load static %}
+<section id="billboard" class="bg-light relative bg-image-fill position-relative eevee-bg">
+<div class="position-absolute top-0 start-0 w-100 h-100 -z-1 bg-light opacity-90"></div>
+    <div class="container">
+      <div class="row justify-content-center">
+        <h1 class="section-title text-center mt-4" data-aos="fade-up">New Collections</h1>
+        <div class="col-md-6 text-center" data-aos="fade-up" data-aos-delay="300">
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe voluptas ut dolorum consequuntur, adipisci
+            repellat! Eveniet commodi voluptatem voluptate, eum minima, in suscipit explicabo voluptatibus harum,
+            quibusdam ex repellat eaque!</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="swiper main-swiper py-4" data-aos="fade-up" data-aos-delay="600">
+          <div class="swiper-wrapper d-flex border-animation-left">
+
+
+
+            {% if products %}
+            {% for product in products %}
+            <div class="swiper-slide">
+              <div class="banner-item">
+                <div class="image-holder">
+                  <a href="#">
+                    <img src="{{ product.image.url }}" alt="Representative image for {{ product.name }}" class="img-fluid">
+                  </a>
+                </div>
+                <div class="banner-content py-4">
+                  <h5 class="element-title text-uppercase">
+                    <a href="index.html" class="item-anchor">{{ product.name }}</a>
+                  </h5>
+                  <p>{{ product.description }}</p>
+                  <div class="btn-left">
+                    <a href="#" class="btn-link fs-6 text-uppercase item-anchor text-decoration-none">Discover Now</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+
+
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+        <div class="icon-arrow icon-arrow-left"><svg width="50" height="50" viewBox="0 0 24 24">
+            <use xlink:href="#arrow-left"></use>
+          </svg></div>
+        <div class="icon-arrow icon-arrow-right"><svg width="50" height="50" viewBox="0 0 24 24">
+            <use xlink:href="#arrow-right"></use>
+          </svg></div>
+      </div>
+    </div>
+  </section>
