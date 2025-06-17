@@ -33,6 +33,7 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
     stock = models.PositiveIntegerField(default=0)
     image = models.ImageField(upload_to='uploads/product/', blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
