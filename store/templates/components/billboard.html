@@ -3,7 +3,13 @@
 <div class="position-absolute top-0 start-0 w-100 h-100 -z-1 bg-light opacity-90"></div>
     <div class="container">
       <div class="row justify-content-center">
-        <h1 class="section-title text-center mt-4" data-aos="fade-up">New Collections</h1>
+        <h1 class="section-title text-center mt-4" data-aos="fade-up">
+          {% if title %}
+          {{ title }}
+          {% else %}
+          New Collections
+          {% endif %}
+        </h1>
         <div class="col-md-6 text-center" data-aos="fade-up" data-aos-delay="300">
           <p>{{paragraph}}</p>
         </div>
@@ -21,10 +27,15 @@
                   </a>
                 </div>
                 <div class="banner-content py-4">
-                  <h5 class="element-title text-uppercase">
+                     <a href="/category/{{ product.category.slug }}" class="text-decoration-none">
+                        <button type="button" class="btn btn-primary">
+                          {{ product.category }}
+                        </button>
+                      </a>
+                  <h5 class="element-title text-uppercase mt-3">
                     <a href="index.html" class="item-anchor">{{ product.name }}</a>
                   </h5>
-                  <p>{{ product.description }}</p>
+                  <p class="text-black">{{ product.description }}</p>
                   <div class="btn-left">
                     <a href="{% url 'product' product.slug %}" class="btn-link fs-6 text-uppercase item-anchor text-decoration-none">View Product</a>
                   </div>

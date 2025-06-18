@@ -9,11 +9,35 @@ from .forms import SignUpForm
 
 # Function to handle product details view
 def product(request, slug):
-    product = Product.objects.get(slug=slug)  # Fetch the product by name
+    product = Product.objects.get(category=slug)  # Fetch the product by name
     if not product:
         messages.error(request, 'Product not found.')  # Show an error message if the product does not exist
         return redirect('home')  # Redirect to home if the product is not found
     return render(request, 'product.html', {'product': product})  # Render the product.html template with the product data
+
+
+# Function to handle category view
+def category(request, slug):
+    try:
+        # Attempt to fetch the category by slug
+        category = Category.objects.get(slug=slug)
+        # Get first 5 objects for featured billboard
+        products = Product.objects.filter(category=category)  # Fetch products belonging to the category
+        featuredProducts = Product.objects.all()[:5]  # Fetch the first 5 products for the featured section
+        # Render the category.html template with the category and products data
+        return render(
+            request,
+            'category.html',
+            {
+                'category': category,
+                'products': products,
+                'featuredProducts':featuredProducts
+                }
+        ) 
+    except:
+        # Show an error message if the category does not exist
+        messages.error(request, 'Category does not exist.')  
+        return redirect('home')  # Redirect to home if the category does not exist
 
 
 # Create your views here.

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Your #1 Pokémon Card Shop | UK Based{% endblock %}
+{% block description %}Discover the best Pokémon cards and collectibles at Eevee Emporium. Shop now for rare finds and exclusive deals.{% endblock %}
+{% block keywords %}Pokémon cards, collectibles, Eevee Emporium, rare cards, trading cards, Pokémon shop{% endblock %}
+
+{% block content %}
+{% include 'components/billboard.html' with products=featuredProducts title=category.name %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-center mb-4">Results For: {{ category.name }}</h2>
+        </div>
+
+        {% for product in products %}
+        <div class="col-md-6 mb-4">
+            <div class="card mb-3 py-5 border-0" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                    <img src="{{ product.image.url }}" class="img-fluid rounded-start" alt="{{ product.name }}">
+                    </div>
+                    <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">{{ product.description }}</p>
+                        <p class="card-text"><strong>Price:</strong> £{{ product.price }}</p>
+                        <a href="{% url 'product' product.slug %}" class="btn btn-primary">View Product</a>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% if not products %}
+        <div class="col-md-12">
+            <p class="text-center">No products found in this category.</p>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

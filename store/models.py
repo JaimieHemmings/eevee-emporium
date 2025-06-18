@@ -5,6 +5,19 @@ from django.utils.text import slugify
 # Categories of products
 class Category(models.Model):
     name = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=100, unique=True, blank=True, null=True, editable=False)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        
+        # Handle duplicate slugs by adding a number
+        original_slug = self.slug
+        counter = 1
+        while Product.objects.filter(slug=self.slug).exists():
+            self.slug = f"{original_slug}-{counter}"
+            counter += 1
+        
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name_plural = "Categories"
