@@ -2,6 +2,10 @@ from django.shortcuts import render, redirect
 from .models import Product, Category
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from django import forms
+from .forms import SignUpForm
 
 # Create your views here.
 def home(request):
@@ -14,6 +18,7 @@ def about(request):
     return render(request, 'about.html')  # Render the about.html template
 
 
+# Function to handle user login
 def login_user(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -30,7 +35,30 @@ def login_user(request):
     return render(request, 'login.html', {})  # Render the login.html template
 
 
+# Function to handle user logout
 def logout_user(request):
     logout(request)  # Log the user out
     messages.success(request, 'You have been logged out.')
     return redirect('home')  # Redirect to home after logout
+
+
+# Function to handle user registration
+def register_user(request):
+    form = SignUpForm()  # Create an instance of the SignUpForm
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)  # Create a form instance with the submitted data
+        if form.is_valid():  # Check if the form is valid
+            user = form.save()  # Save the new user
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
+            # Authenticate the user after registration
+            user = authenticate(username=username, password=password)  
+            login(request, user)  # Log the user in
+            messages.success(request, 'Registration successful!')
+            return redirect('home')  # Redirect to home after successful registration
+    else:
+        form = SignUpForm()
+        messages.info(request, 'Please fill out the form to register.')
+        return render(request, 'register.html', {'form': form})
+
+    return render(request, 'register.html', {'form': form})  # Render the register.html template with the form

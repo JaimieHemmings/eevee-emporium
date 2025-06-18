@@ -1665,3 +1665,19 @@ a.btn-link.text-light:after {
 .bg-no-repeat {
   background-repeat: no-repeat;
 }
+
+.form-control,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+form p {
+  padding: 0;
+  width: 100%;
+}
