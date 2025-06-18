@@ -7,6 +7,15 @@ from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from .forms import SignUpForm
 
+# Function to handle product details view
+def product(request, slug):
+    product = Product.objects.get(slug=slug)  # Fetch the product by name
+    if not product:
+        messages.error(request, 'Product not found.')  # Show an error message if the product does not exist
+        return redirect('home')  # Redirect to home if the product is not found
+    return render(request, 'product.html', {'product': product})  # Render the product.html template with the product data
+
+
 # Create your views here.
 def home(request):
     products = Product.objects.order_by('-created_at')[:10] # Fetch the latest 10 products

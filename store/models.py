@@ -1,5 +1,6 @@
 from django.db import models
 import datetime
+from django.utils.text import slugify
 
 # Categories of products
 class Category(models.Model):
@@ -34,6 +35,19 @@ class Product(models.Model):
     stock = models.PositiveIntegerField(default=0)
     image = models.ImageField(upload_to='uploads/product/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    slug = models.SlugField(max_length=100, unique=True, blank=True, null=True, editable=False)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        
+        # Handle duplicate slugs by adding a number
+        original_slug = self.slug
+        counter = 1
+        while Product.objects.filter(slug=self.slug).exists():
+            self.slug = f"{original_slug}-{counter}"
+            counter += 1
+        
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name

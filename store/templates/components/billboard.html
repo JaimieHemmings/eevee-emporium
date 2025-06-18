@@ -11,15 +11,12 @@
       <div class="row">
         <div class="swiper main-swiper py-4" data-aos="fade-up" data-aos-delay="600">
           <div class="swiper-wrapper d-flex border-animation-left">
-
-
-
             {% if products %}
             {% for product in products %}
             <div class="swiper-slide">
               <div class="banner-item">
                 <div class="image-holder">
-                  <a href="#">
+                  <a href="{% url 'product' product.slug %}">
                     <img src="{{ product.image.url }}" alt="Representative image for {{ product.name }}" class="img-fluid">
                   </a>
                 </div>
@@ -29,16 +26,13 @@
                   </h5>
                   <p>{{ product.description }}</p>
                   <div class="btn-left">
-                    <a href="#" class="btn-link fs-6 text-uppercase item-anchor text-decoration-none">Discover Now</a>
+                    <a href="{% url 'product' product.slug %}" class="btn-link fs-6 text-uppercase item-anchor text-decoration-none">View Product</a>
                   </div>
                 </div>
               </div>
             </div>
             {% endfor %}
             {% endif %}
-
-
-
           </div>
           <div class="swiper-pagination"></div>
         </div>

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Your #1 Pokémon Card Shop | UK Based{% endblock %}
+{% block description %}Discover the best Pokémon cards and collectibles at Eevee Emporium. Shop now for rare finds and exclusive deals.{% endblock %}
+{% block keywords %}Pokémon cards, collectibles, Eevee Emporium, rare cards, trading cards, Pokémon shop{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="card product-card border-0">
+                    <div class="row g-0">
+                        <div class="col-lg-4">
+                            <div class="position-relative">
+                                <img src="{{ product.image.url }}" 
+                                     alt="{{ product.name }}" 
+                                     class="img-fluid product-image w-100">
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-8">
+                            <div class="card-body p-4">
+                                <h1 class="product-title h2">{{ product.name }}</h1>
+                                
+                                <div class="product-description mb-4">
+                                    <p>{{ product.description }}</p>
+                                </div>
+                                
+                                <div class="price-section mb-4">
+                                    <span class="price-badge">£{{ product.price }}</span>
+                                </div>
+                                
+                                <div class="action-buttons d-flex flex-wrap gap-3">
+                                    <button class="btn btn-primary-custom btn-lg">
+                                        <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                                    </button>
+                                </div>
+                                
+                                <div class="shipping-info mt-4 p-3 bg-light rounded">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-truck text-success me-2"></i>
+                                        <small class="text-muted">Free shipping • Fast delivery</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
