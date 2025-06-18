@@ -6,11 +6,11 @@
 {% block keywords %}Pokémon cards, collectibles, Eevee Emporium, rare cards, trading cards, Pokémon shop{% endblock %}
 
 {% block content %}
-{% include 'components/billboard.html' with products=featuredProducts title=category.name %}
+{% include 'components/billboard.html' with products=featuredProducts title=searchCategory.name %}
 <div class="container my-5">
     <div class="row">
         <div class="col-md-12">
-            <h2 class="text-center mb-4">Results For: {{ category.name }}</h2>
+            <h2 class="text-center mb-4">Results For: {{ searchCategory.name }}</h2>
         </div>
 
         {% for product in products %}
