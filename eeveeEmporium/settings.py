@@ -49,7 +49,10 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'store.utils.context_processors.categories_processor',  # Custom context processor for categories
+                # Custom context processor for categories
+                'store.utils.context_processors.categories_processor',
+                # Cart Processor
+                'cart.context_processors.cart',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
