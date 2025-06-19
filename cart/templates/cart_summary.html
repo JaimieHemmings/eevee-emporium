@@ -14,5 +14,69 @@ Welcome to Eevee Emporium, your ultimate destination for Pokémon cards and coll
             <p>View your cart...</p>
         </div>
     </div>
+    <div class="row">
+        <div class="col-12">
+            {% if cart_products %}
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                    <th>Product</th>
+                    <th class="d-none d-md-table-cell">Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_products %}
+                    <tr>
+                    <td>
+                        {% if item.image %}
+                        <a href="{% url 'product' item.slug %}">
+                            <img src="{{ item.image }}" alt="{{ item.name }}" class="img-thumbnail" style="max-width: 80px;">
+                        </a>
+                        {% else %}
+                        <span class="text-muted">No image</span>
+                        {% endif %}
+                    </td>
+                    <td class="d-none d-md-table-cell">{{ item.name }}</td>
+                    <td>${{ item.price }}</td>
+                    <td>
+                        <div class="input-group" style="max-width: 120px;">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-secondary btn-sm" type="button">-</button>
+                        </div>
+                        <input type="text" class="form-control text-center" value="{{ item.quantity }}">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary btn-sm" type="button">+</button>
+                        </div>
+                        </div>
+                    </td>
+                    <td>${{ item.total }}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm remove-item" data-id="{{ item.product.id }}">
+                        <i class="fas fa-trash"></i> Remove
+                        </button>
+                    </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                    <td colspan="4" class="text-right"><strong>Cart Total:</strong></td>
+                    <td>${{ cart_total }}</td>
+                    <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+            {% else %}
+            <div class="alert alert-info text-center" role="alert">
+                Your cart is empty. Start shopping now!
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
 </div>
 {% endblock %}
