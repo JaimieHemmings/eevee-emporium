@@ -32,7 +32,14 @@
                                 </div>
                                 
                                 <div class="action-buttons d-flex flex-wrap gap-3">
-                                    <button class="btn btn-primary-custom btn-lg" value="{{ product.id }}" id="add-cart">
+                                    <select class="form-select w-auto" id="quantity-select">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                    <button class="btn btn-primary btn-lg" value="{{ product.id }}" id="add-cart">
                                         <i class="fas fa-shopping-cart me-2"></i>Add to Cart
                                     </button>
                                 </div>
@@ -57,13 +64,26 @@
     // Check if button is pressed to add an item to the cart
     $(document).on('click', '#add-cart', function(e) {
         e.preventDefault();
+
+        console.log('Product ID:', $('#add-cart').val());
+        console.log('Quantity:', $('#quantity-select option:selected').text());
+
+        let data = {
+            'product_id': $('#add-cart').val(),
+            'product_qty': $('#quantity-select option:selected').text(),
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+            action: 'post',
+        }
+
+        console.log(data);
+
         $.ajax({
             type: 'POST',
             url: '{% url "cart_add" %}',
-            data: {
-                'product_id': $('#add-cart').val(),
-                'csrfmiddlewaretoken': '{{ csrf_token }}',
-                action: 'post',
+            data: data,
+
+            success: function() {
+                location.reload();
             },
 
             error: function(xhr, errmsg, err) {

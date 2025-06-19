@@ -20,52 +20,41 @@ Welcome to Eevee Emporium, your ultimate destination for Pokémon cards and coll
             <table class="table table-striped">
                 <thead class="thead-dark">
                     <tr>
-                    <th>Product</th>
-                    <th class="d-none d-md-table-cell">Name</th>
+                    <th>Name</th>
                     <th>Price</th>
-                    <th>Quantity</th>
+                    <th>QTY</th>
                     <th>Total</th>
                     <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for item in cart_products %}
-                    <tr>
+                    <tr id="row-{{item.product.id}}">
                     <td>
-                        {% if item.image %}
                         <a href="{% url 'product' item.slug %}">
-                            <img src="{{ item.image }}" alt="{{ item.name }}" class="img-thumbnail" style="max-width: 80px;">
+                            {{ item.name }}
                         </a>
-                        {% else %}
-                        <span class="text-muted">No image</span>
-                        {% endif %}
                     </td>
-                    <td class="d-none d-md-table-cell">{{ item.name }}</td>
-                    <td>${{ item.price }}</td>
+                    <td>£{{ item.price }}</td>
                     <td>
-                        <div class="input-group" style="max-width: 120px;">
-                        <div class="input-group-prepend">
-                            <button class="btn btn-outline-secondary btn-sm" type="button">-</button>
-                        </div>
-                        <input type="text" class="form-control text-center" value="{{ item.quantity }}">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary btn-sm" type="button">+</button>
-                        </div>
-                        </div>
+                        <p>{{ item.quantity }}</p>                        
                     </td>
-                    <td>${{ item.total }}</td>
+                    <td>£{{ item.total }}</td>
                     <td>
-                        <button class="btn btn-danger btn-sm remove-item" data-id="{{ item.product.id }}">
-                        <i class="fas fa-trash"></i> Remove
+                        <button
+                            class="btn btn-danger delete-item rounded"
+                            data-id="{{ item.product.id }}"
+                        >
+                            Remove
                         </button>
                     </td>
                     </tr>
                     {% endfor %}
                 </tbody>
-                <tfoot>
+                <tfoot class="table-footer">
                     <tr>
                     <td colspan="4" class="text-right"><strong>Cart Total:</strong></td>
-                    <td>${{ cart_total }}</td>
+                    <td>£{{ total_price }}</td>
                     <td></td>
                     </tr>
                 </tfoot>
@@ -79,4 +68,31 @@ Welcome to Eevee Emporium, your ultimate destination for Pokémon cards and coll
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).on('click', '.delete-item', function(e){
+        e.preventDefault();
+        
+        $.ajax({
+            type: 'POST',
+            url: '{% url "cart_remove" %}',
+            data: {
+                'product_id': $(this).data('id'),
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+                action: 'post',
+            },
+
+            success: function() {
+                location.reload();
+            },
+
+            error: function(xhr, status, error) {
+                console.error('Error removing item:', error);
+                alert('An error occurred while removing the item. Please try again.');
+            }
+        })
+    })
+</script>
 {% endblock %}

@@ -1,28 +1,40 @@
 {% if list %}
-<section class="categories overflow-hidden">
-    <div class="container">
-      <div class="open-up" data-aos="zoom-out">
-        <div class="row">
-          {% for item in list %}
-          <div class="col-md-4">
-            <div class="cat-item image-zoom-effect">
-              <div class="image-holder">
-                <a href="/set/{{ item.slug }}">
-                  <img src="{{ item.image.url }}" alt="categories" class="product-image img-fluid">
+<section class="categories overflow-hidden my-5">
+  {% if title %}
+  <div class="container">
+    <div class="row">
+      <div class="col-12 mb-5">
+        <h2>{{ title }}</h2>
+        {% if paragraph %}
+        <p>{{ paragraph }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  <div class="container">
+    <div class="open-up" data-aos="zoom-out">
+      <div class="row">
+        {% for item in list %}
+        <div class="col-md-4">
+          <div class="cat-item image-zoom-effect">
+            <div class="image-holder">
+              <a href="/set/{{ item.slug }}">
+                <img src="{{ item.image.url }}" alt="categories" class="product-image img-fluid">
+              </a>
+            </div>
+            <div class="category-content">
+              <div class="product-button">
+                <a href="index.html" class="btn btn-common text-uppercase">
+                  {{ item.name }}
                 </a>
-              </div>
-              <div class="category-content">
-                <div class="product-button">
-                  <a href="index.html" class="btn btn-common text-uppercase">
-                    {{ item.name }}
-                  </a>
-                </div>
               </div>
             </div>
           </div>
-          {% endfor %}
         </div>
+        {% endfor %}
       </div>
     </div>
-  </section>
-  {% endif %}
+  </div>
+</section>
+{% endif %}
