@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Product, Category
+from .models import Product, Category, Set
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -41,7 +41,33 @@ def category(request, slug):
         )
     except Exception as e:
         # Show an error message if the category does not exist
-        messages.error(request, 'Category does not exist.')
+        messages.error(request, f'Category does not exist - {e}')
+        # Redirect to home if the category does not exist
+        return redirect('home')
+    
+
+# Function to handle category view
+def set(request, slug):
+    try:
+        # Attempt to fetch the category by slug
+        searchCategory = Set.objects.get(slug=slug)
+        # Fetch products belonging to the category
+        products = Product.objects.filter(set=searchCategory)
+        # Fetch the first 5 products for the featured section
+        featuredProducts = Product.objects.filter(set=searchCategory)[:5]
+        # Render the category.html template with the category and products data
+        return render(
+            request,
+            'category.html',
+            {
+                'searchCategory': searchCategory,
+                'products': products,
+                'featuredProducts': featuredProducts
+            }
+        )
+    except Exception as e:
+        # Show an error message if the category does not exist
+        messages.error(request, f'Set does not exist - {e}')
         # Redirect to home if the category does not exist
         return redirect('home')
 
@@ -52,10 +78,13 @@ def home(request):
     products = Product.objects.order_by('-created_at')[:5]
     # Fetch all categories from the database
     categories = Category.objects.all()
+    # Fetch the latest 5 sets
+    sets = Set.objects.all()[:3]
     # Render the home.html template
     return render(request, 'home.html', {
         'products': products,
-        'categories': categories
+        'categories': categories,
+        'sets': sets
     })
 
 
