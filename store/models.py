@@ -85,15 +85,18 @@ class Product(models.Model):
         max_length=100, unique=True, blank=True, null=True, editable=False
     )
 
+    # Save the slug based on the product name, ensuring uniqueness
+    # If the name changes, update the slug accordingly
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
+        if not self.id:
+            self.slug = slugify(self.name)
 
-        # Handle duplicate slugs by adding a number
-        original_slug = self.slug
-        counter = 1
-        while Product.objects.filter(slug=self.slug).exists():
-            self.slug = f"{original_slug}-{counter}"
-            counter += 1
+        else:
+            # For existing objects, compare with database
+            original = Product.objects.get(id=self.id)
+            if original.name != self.name:
+                # Only update slug if name has changed
+                self.slug = slugify(self.name)
 
         super().save(*args, **kwargs)
 

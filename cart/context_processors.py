@@ -1,5 +1,6 @@
 from .cart import Cart
 
+
 # Contest processors for the cart application
 def cart(request):
     """

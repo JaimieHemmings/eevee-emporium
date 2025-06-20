@@ -51,6 +51,8 @@ TEMPLATES = [
             'context_processors': [
                 # Custom context processor for categories
                 'store.utils.context_processors.categories_processor',
+                # Custom context processor for sets
+                'store.utils.context_processors.sets_processor',
                 # Cart Processor
                 'cart.context_processors.cart',
                 'django.template.context_processors.request',

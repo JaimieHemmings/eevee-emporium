@@ -79,12 +79,12 @@ def home(request):
     # Fetch all categories from the database
     categories = Category.objects.all()
     # Fetch the latest 5 sets
-    sets = Set.objects.all()[:3]
+    featuredSets = Set.objects.all()[:3]
     # Render the home.html template
     return render(request, 'home.html', {
         'products': products,
         'categories': categories,
-        'sets': sets
+        'featuredSets': featuredSets
     })
 
 
