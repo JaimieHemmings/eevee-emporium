@@ -31,12 +31,17 @@ def cart_add(request):
     if request.POST.get('action') == 'post':
         product_id = request.POST.get('product_id')
         product_qty_str = request.POST.get('product_qty', '1')
+
         try:
             product_qty = int(product_qty_str)
             if product_qty < 1:
                 product_qty = 1
+            elif product_qty > 5:
+                product_qty = 10
+                messages.warning(request, 'Maximum quantity of 5 applied.')
         except ValueError:
             product_qty = 1
+            messages.warning(request, 'Invalid quantity provided, defaulting to 1.')
 
         product = get_object_or_404(Product, id=product_id)
 
@@ -47,7 +52,8 @@ def cart_add(request):
         cart_quantity = cart.__len__()
 
         messages.success(
-            request, f'{product.name} has been added to your cart.'
+            request,
+            f'{product.name} has been added to your cart.',
         )
         response = JsonResponse(
             {'cart_quantity': cart_quantity}
