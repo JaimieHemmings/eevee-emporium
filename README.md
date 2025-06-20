@@ -27,14 +27,14 @@ I opted not to use AllAuth in this project as Django comes with a robust and sec
 
 2 - Authentication Views and URLs: Django includes pre-built views and URL patterns for common authentication actions:
 
-    - login/
-    - logout/
-    - password_change/
-    - password_change/done/
-    - password_reset/
-    - password_reset/done/
-    - reset/<uidb64>/<token>/
-    - reset/done/
+- login/
+- logout/
+- password_change/
+- password_change/done/
+- password_reset/
+- password_reset/done/
+- reset/<uidb64>/<token>/
+- reset/done/
 
 By simply including django.contrib.auth.urls in our urls.py and creating custom templates for these views, we can get a fully functional authentication system with minimal effort.
 
@@ -50,14 +50,14 @@ By simply including django.contrib.auth.urls in our urls.py and creating custom 
 
 Django AllAuth is a fantastic and comprehensive package that offers a wide array of features, particularly for more complex authentication needs. However, for our project, these advanced features are currently not required, making AllAuth an unnecessary addition:
 
-    - Social Authentication (Google, Facebook, etc.): AllAuth excels at integrating with various social login providers. If our project required users to sign up or log in via Google, Facebook, Twitter, etc., AllAuth would be a strong contender. However, our current scope only requires traditional username/email and password authentication.
+- Social Authentication (Google, Facebook, etc.): AllAuth excels at integrating with various social login providers. If our project required users to sign up or log in via Google, Facebook, Twitter, etc., AllAuth would be a strong contender. However, our current scope only requires traditional username/email and password authentication.
     
-    - Email Verification Workflows: While Django's default system can be extended for email verification, AllAuth provides robust, ready-to-use email verification workflows (mandatory, optional, none). Our current needs for email verification are basic and can be handled with simpler custom logic.
+- Email Verification Workflows: While Django's default system can be extended for email verification, AllAuth provides robust, ready-to-use email verification workflows (mandatory, optional, none). Our current needs for email verification are basic and can be handled with simpler custom logic.
     
-    - Account Management Beyond Basic Updates: AllAuth includes more advanced account management features like linking/unlinking multiple email addresses, managing social account connections, etc. These features are not part of our initial requirements.
+- Account Management Beyond Basic Updates: AllAuth includes more advanced account management features like linking/unlinking multiple email addresses, managing social account connections, etc. These features are not part of our initial requirements.
     
-    - Pre-built Templates and Views (Opinionated): AllAuth provides a set of pre-built templates and views that can accelerate development. However, these are often more opinionated in their structure and styling, and customizing them to fit a unique design can sometimes be more involved than building custom templates from scratch with Django's default views.
+- Pre-built Templates and Views (Opinionated): AllAuth provides a set of pre-built templates and views that can accelerate development. However, these are often more opinionated in their structure and styling, and customizing them to fit a unique design can sometimes be more involved than building custom templates from scratch with Django's default views.
     
-    - Increased Dependency: Every third-party library adds a dependency to the project, which can introduce overhead in terms of maintenance, updates, and potential conflicts. By using Django's default, we keep our dependency footprint smaller.
+- Increased Dependency: Every third-party library adds a dependency to the project, which can introduce overhead in terms of maintenance, updates, and potential conflicts. By using Django's default, we keep our dependency footprint smaller.
 
 In summary, for our Django project's user authentication and profile functionality, the built-in features of Django are perfectly capable and provide a secure, flexible, and maintainable solution without the added complexity of a larger third-party library like Django AllAuth. We can achieve all our requirements by extending and customizing Django's powerful default authentication system.
