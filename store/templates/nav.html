@@ -69,7 +69,7 @@
                   <ul class="dropdown-menu list-unstyled" aria-labelledby="dropdownShop">
                     {% if user.is_authenticated %}
                     <li>
-                      <a href="index.html" class="dropdown-item item-anchor">Account</a>
+                      <a href="{% url 'update_user' %}" class="dropdown-item item-anchor">Account</a>
                     </li>
                     <li>
                       <a href="{% url 'logout' %}" class="dropdown-item item-anchor">Log Out</a>
@@ -107,7 +107,7 @@
                 <ul class="dropdown-menu list-unstyled" aria-labelledby="dropdownShop">
                   {% if user.is_authenticated %}
                   <li>
-                    <a href="index.html" class="dropdown-item item-anchor">Account</a>
+                    <a href="{% url 'update_user' %}" class="dropdown-item item-anchor">Account</a>
                   </li>
                   <li>
                     <a href="{% url 'logout' %}" class="dropdown-item item-anchor">Log Out</a>

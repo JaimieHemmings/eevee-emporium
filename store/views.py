@@ -3,9 +3,8 @@ from .models import Product, Category, Set
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .forms import SignUpForm
+from .forms import SignUpForm, UpdateUserForm
 
 
 # Function to handle product details view
@@ -44,7 +43,7 @@ def category(request, slug):
         messages.error(request, f'Category does not exist - {e}')
         # Redirect to home if the category does not exist
         return redirect('home')
-    
+
 
 # Function to handle category view
 def set(request, slug):
@@ -89,7 +88,7 @@ def home(request):
 
 
 def about(request):
-    return render(request, 'about.html')  # Render the about.html template
+    return render(request, 'about.html')
 
 
 # Function to handle user login
@@ -99,13 +98,14 @@ def login_user(request):
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)  # Log the user in
+            # Log the user in
+            login(request, user)
             messages.success(request, 'Login successful!')
             return redirect('home')
         else:
             messages.error(request, 'Invalid username or password.')
             return redirect('login')
-    return render(request, 'login.html', {})  # Render the login.html template
+    return render(request, 'login.html', {})
 
 
 # Function to handle user logout
@@ -117,17 +117,17 @@ def logout_user(request):
 
 # Function to handle user registration
 def register_user(request):
-    form = SignUpForm()  # Create an instance of the SignUpForm
+    form = SignUpForm()
     if request.method == 'POST':
         # Create a form instance with the submitted data
         form = SignUpForm(request.POST)
-        if form.is_valid():  # Check if the form is valid
-            user = form.save()  # Save the new user
+        if form.is_valid():
+            user = form.save()
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
             # Authenticate the user after registration
             user = authenticate(username=username, password=password)
-            login(request, user)  # Log the user in
+            login(request, user)
             messages.success(request, 'Registration successful!')
             # Redirect to home after successful registration
             return redirect('home')
@@ -137,3 +137,38 @@ def register_user(request):
         return render(request, 'register.html', {'form': form})
     # Render the register.html template with the form
     return render(request, 'register.html', {'form': form})
+
+
+# Function to handle user profile update
+def update_user(request):
+    """
+    This function checks if the user is authenticated
+    and allows them to update their profile information.
+    """
+    if request.user.is_authenticated:
+        current_user = User.objects.get(id=request.user.id)
+        user_form = UpdateUserForm(
+            request.POST or None,
+            instance=current_user
+        )
+
+        if user_form.is_valid():
+            user_form.save()
+            login(request, current_user)
+            messages.success(
+                request, 'Profile updated successfully!'
+            )
+
+        return render(
+            request, 'update_user.html', {'user_form': user_form}
+        )
+    else:
+        messages.error(
+            request,
+            'You need to be logged in to update your profile.'
+        )
+        return redirect('login')
+
+
+def update_password(request):
+    return render(request, 'update_password.html', {})

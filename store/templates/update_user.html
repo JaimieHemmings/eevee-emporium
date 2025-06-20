@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Update profile infromation{% endblock %}
+{% block description %}
+Update your profile information at Eevee Emporium. Ensure your details are current to receive the latest news and updates on Pokémon cards and collectibles. Your profile helps us serve you better with personalized recommendations and exclusive offers.
+{% endblock %}
+{% block keywords %}
+update, profile, information, Eevee Emporium, Pokémon cards, collectibles, personalized recommendations, exclusive offers{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="row">
+        <div class="col-12 text-center mb-4">
+            <h1>Update Profile</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <form method="POST" action="{% url 'update_user' %}">
+                {% csrf_token %}
+                <div class="form-group d-flex flex-column">
+                    {{ user_form.as_p }}
+                </div>
+                <button type="submit" class="btn btn-primary mb-3">Update Profile</button>
+            </form>
+            <div class="py-5">
+                <p class="text-center">If you want to change your password, please go to the <a href="{% url 'update_password' %}">Update Password</a> page.</p>
+                <div class="d-flex flex-row gap-3 justify-content-center">
+                    <a href="{% url 'update_password' %}" class="btn btn-primary">Update Password</a>
+                    <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
