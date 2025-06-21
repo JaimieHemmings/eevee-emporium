@@ -1,6 +1,47 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, SetPasswordForm
 from django.contrib.auth.models import User
+
+
+class ChangePasswordForm(SetPasswordForm):
+    """
+    Form for changing the user's password.
+    Inherits from SetPasswordForm to handle password change functionality.
+    """
+
+    class meta:
+        model = User
+        fields = ('new_password1', 'new_password2')
+
+    new_password1 = forms.CharField(
+        label="",
+        widget=forms.PasswordInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'New Password'
+            }
+        )
+    )
+    new_password2 = forms.CharField(
+        label="",
+        widget=forms.PasswordInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Confirm New Password'
+            }
+        )
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(ChangePasswordForm, self).__init__(*args, **kwargs)
+        self.fields['new_password1'].help_text = (
+            '<ul class="form-text text-muted small">'
+            '<li>Your password can\'t be too similar to your'
+            'other personal information.</li><li>'
+            'Your password must contain at least 8 characters.'
+            '</li><li>Your password can\'t be a commonly used password.'
+            '</li><li>Your password can\'t be entirely numeric.</li></ul>'
+        )
 
 
 class SignUpForm(UserCreationForm):

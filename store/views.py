@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django import forms
-from .forms import SignUpForm, UpdateUserForm
+from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm
 
 
 # Function to handle product details view
@@ -171,4 +171,44 @@ def update_user(request):
 
 
 def update_password(request):
-    return render(request, 'update_password.html', {})
+    """
+    This view allows authenticated users to change their password.
+    """
+    if request.user.is_authenticated:
+        current_user = request.user
+        if request.method == 'POST':
+            form = ChangePasswordForm(
+                user=current_user,
+                data=request.POST
+            )
+            if form.is_valid():
+                form.save()
+                messages.success(
+                    request,
+                    'Your password has been changed successfully! Please log in again.'
+                )
+                return redirect('login')
+            else:
+                # If the form is not valid, display the errors
+                for error in list(form.errors.values()):
+                    messages.error(
+                        request,
+                        f'Error: {error}'
+                    )
+                return render(request, 'update_password.html', {
+                    'password_form': form
+                })
+        else:
+            form = ChangePasswordForm(
+                current_user
+            )
+            return render(request, 'update_password.html', {
+                'password_form': form
+            })
+
+    else:
+        messages.error(
+            request,
+            'You need to be logged in to change your password.'
+        )
+        return redirect('login')

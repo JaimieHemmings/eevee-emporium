@@ -1,3 +1,5 @@
+# Eevee Emporium
+
 install virtual environment:
 ```python -m venv virt```
 
