@@ -6,6 +6,18 @@ install virtual environment:
 Run Virtual Environment:
 ```./virt/Scripts/activate```
 
+Install requirements:
+```pip install -r requirements.txt```
+
+Create superuser:
+```python manage.py createsuperuser```
+
+Follow prompts to add username, email and password.
+
+Launch development server:
+```python manage.py reunserver```
+
+
 Template:
 https://themewagon.com/themes/kaira/
 

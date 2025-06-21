@@ -1,6 +1,37 @@
 from django.db import models
 import datetime
 from django.utils.text import slugify
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+
+class Profile(models.Model):
+    """
+    Profile model to extend the User model with additional fields.
+    """
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    date_modified = models.DateTimeField(auto_now=True)
+    phone = models.CharField(max_length=15, blank=True, null=True)
+    address1 = models.CharField(max_length=200, blank=True, null=True)
+    address2 = models.CharField(max_length=200, blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    county = models.CharField(max_length=100, blank=True, null=True)
+    postcode = models.CharField(max_length=20, blank=True, null=True)
+    country = models.CharField(max_length=100, blank=True, null=True, default='United Kingdom')
+
+    def __str__(self):
+        return self.user.username
+    
+
+# Create a user profile automatically when a User is created
+def create_profile(sender, instance, created, **kwargs):
+    """
+    Signal to create a Profile instance when a User is created.
+    """
+    if created:
+        user_profile = Profile(user=instance)
+        user_profile.save()
+# Connect the create_profile function to the post_save signal of User
+post_save.connect(create_profile, sender=User)
 
 
 # Categories of products

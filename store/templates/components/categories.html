@@ -18,11 +18,16 @@
         {% for item in list %}
         <div class="col-md-4">
           <div class="cat-item image-zoom-effect">
+            {% if item.image %}
             <div class="image-holder">
               <a href="/set/{{ item.slug }}">
-                <img src="{{ item.image.url }}" alt="categories" class="product-image img-fluid">
+                <div class="ratio ratio-4x3">
+                  <img src="{{ item.image.url }}" alt="{{ item.name }}" class="img-fluid object-fit-cover rounded">
+                </div>
               </a>
             </div>
+            {% else %}  
+            {% endif %}
             <div class="category-content">
               <div class="product-button">
                 <a href="index.html" class="btn btn-common text-uppercase">
