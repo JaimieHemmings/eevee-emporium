@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, SetPasswordForm
 from django.contrib.auth.models import User
+from .models import Profile
 
 
 class ChangePasswordForm(SetPasswordForm):
@@ -181,3 +182,104 @@ class UpdateUserForm(UserChangeForm):
             'Letters, digits and @/./+/-/_ only.'
             '</small></span>'
         )
+
+
+class UserInfoForm(forms.ModelForm):
+    """
+    Form for updating user information.
+    This form is used to update additional user details.
+    """
+    phone = forms.CharField(
+        label="",
+        max_length=15,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Phone Number'
+            }
+        )
+    )
+    address1 = forms.CharField(
+        label="",
+        max_length=200,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Address Line 1'
+            }
+        )
+    )
+    address2 = forms.CharField(
+        label="",
+        max_length=200,
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Address Line 2 (optional)'
+            }
+        )
+    )
+    city = forms.CharField(
+        label="",
+        max_length=100,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'City'
+            }
+        )
+    )
+    county = forms.CharField(
+        label="",
+        max_length=100,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'County'
+            }
+        )
+    )
+    postcode = forms.CharField(
+        label="",
+        max_length=20,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Post Code'
+            }
+        )
+    )
+    country = forms.CharField(
+        label="",
+        max_length=100,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Country',
+                'value': 'United Kingdom',
+            }
+        ),
+        initial='United Kingdom'
+    )
+
+    class Meta:
+        model = Profile
+        fields = [
+            'phone',
+            'address1',
+            'address2',
+            'city',
+            'county',
+            'postcode',
+            'country'
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super(UserInfoForm, self).__init__(*args, **kwargs)
+
+        # Customizing the form fields
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+            self.fields[field].label = ''
+            self.fields[field].help_text = ''

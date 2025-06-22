@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
-from .models import Product, Category, Set
+from .models import Product, Category, Set, Profile
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django import forms
-from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm
+from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
 
 
 # Function to handle product details view
@@ -185,7 +185,8 @@ def update_password(request):
                 form.save()
                 messages.success(
                     request,
-                    'Your password has been changed successfully! Please log in again.'
+                    'Your password has been changed successfully!'
+                    'Please log in again.'
                 )
                 return redirect('login')
             else:
@@ -210,5 +211,37 @@ def update_password(request):
         messages.error(
             request,
             'You need to be logged in to change your password.'
+        )
+        return redirect('login')
+
+
+def update_info(request):
+    if request.user.is_authenticated:
+        # Account for potential mismatch between User and Profile IDs
+        # Ensure that the Profile instance is fetched correctly
+        current_user = Profile.objects.get(user__id=request.user.id)
+        user_info_form = UserInfoForm(
+            request.POST or None,
+            instance=current_user
+        )
+        if user_info_form.is_valid():
+            user_info_form.save()
+            messages.success(
+                request, 'Your information has been updated successfully!'
+            )
+        else:
+            # If the form is not valid, display the errors
+            for error in list(user_info_form.errors.values()):
+                messages.error(
+                    request,
+                    f'Error: {error}'
+                )
+        return render(request, 'update_info.html', {
+            'user_form': user_info_form
+        })
+    else:
+        messages.error(
+            request,
+            'You need to be logged in to update your information.'
         )
         return redirect('login')

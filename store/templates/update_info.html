@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Update your profile information | UK Based
+{% endblock %}
+{% block description %}
+Update your profile information at Eevee Emporium. Ensure your details are current to receive the latest news and exclusive offers on Pokémon cards and collectibles. Your privacy is our priority, and we make it easy to keep your information up-to-date.
+{% endblock %}
+{% block keywords %}Pokémon cards, collectibles, Eevee Emporium, rare cards, trading cards, Pokémon shop{% endblock %}
+
+{% block content %}
+<section class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h1 class="text-center">Profile Information</h1>
+            <p class="text-center">
+                Please fill out the form below to update your profile information. Keeping your details current helps us provide you with the best service and exclusive offers.
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <form method="POST" action="{% url 'update_info' %}">
+                {% csrf_token %}
+                <div class="form-group d-flex flex-column">
+                    {{ user_form.as_p }}
+                </div>
+                <button type="submit" class="btn btn-primary mb-3">Update Information</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
