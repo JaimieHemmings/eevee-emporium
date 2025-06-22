@@ -245,3 +245,49 @@ def update_info(request):
             'You need to be logged in to update your information.'
         )
         return redirect('login')
+    
+
+def search(request):
+    """
+    This function handles the search functionality for products, categories and sets.
+    """
+    is_query = False
+    products = None
+    categories = None
+    sets = None
+    search_query = ''
+
+    if request.method == 'POST':
+        is_query = True
+        search_query = request.POST.get('search_query', '').strip()
+        if search_query:
+            # Fetch products, categories and sets matching the search query
+            products = Product.objects.filter(name__icontains=search_query)
+            categories = Category.objects.filter(name__icontains=search_query)
+            sets = Set.objects.filter(name__icontains=search_query)
+            
+            # Check if any results were found
+            found_results = products.exists() or categories.exists() or sets.exists()
+            
+            if found_results:
+                return render(request, 'search.html', {
+                    'products': products,
+                    'categories': categories,
+                    'sets': sets,
+                    'search_query': search_query,
+                    'is_query': is_query
+                })
+            else:
+                messages.info(request, 'No results found matching your search.')
+        else:
+            messages.error(request, 'Please enter a valid search term.')
+    else:
+        pass
+
+    return render(request, 'search.html', {
+        'products': products,
+        'categories': categories,
+        'sets': sets,
+        'search_query': search_query,
+        'is_query': is_query
+    })

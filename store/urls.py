@@ -14,5 +14,5 @@ urlpatterns = [
     path('product/<str:slug>', views.product, name='product'),
     path('category/<str:slug>', views.category, name='category'),
     path('set/<str:slug>', views.set, name='set'),
-    # path('search/', views.search, name='search'),
+    path('search/', views.search, name='search'),
 ]

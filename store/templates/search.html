@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Search for your favourite product | UK Based{% endblock %}
+{% block description %}
+Discover the best Pokémon cards and collectibles at Eevee Emporium. Search for your favorite products, from rare cards to trading essentials. Join our community of collectors today!
+{% endblock %}
+{% block keywords %}Pokémon cards, collectibles, Eevee Emporium, rare cards, trading cards, Pokémon shop{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mt-4 mb-3">Search:</h1>
+    <p>
+    Use the search bar below to find your favorite Pokémon cards and collectibles. Whether you're looking for rare cards, trading essentials, or just browsing, we've got you covered! Enter your search query and explore our extensive collection.
+    </p>
+    <hr>
+    <form method="POST" action="{% url 'search' %}" class="mb-4">
+        {% csrf_token %}
+        <div class="input-group">
+            <input type="text" name="search_query" class="form-control" placeholder="Search for products..." value="{{ search_query|default_if_none:'' }}" aria-label="Search for products" required>
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% if products %}
+<div class="container">
+    <h2 class="mt-4 mb-3">Search Results</h2>
+    <hr>
+    {% for product in products %}
+        <div class="banner-item col-md-4">
+            <div class="image-holder">
+                <a href="{% url 'product' product.slug %}">
+                <img src="{{ product.image.url }}" alt="Representative image for {{ product.name }}" class="img-fluid">
+                </a>
+            </div>
+            <div class="banner-content py-4">
+                    <a href="/category/{{ product.category.slug }}" class="text-decoration-none">
+                    <button type="button" class="btn btn-primary">
+                        {{ product.category }}
+                    </button>
+                    </a>
+                <h5 class="element-title text-uppercase mt-3">
+                <a href="index.html" class="item-anchor">{{ product.name }}</a>
+                </h5>
+                <p class="text-black">{{ product.description }}</p>
+                <div class="btn-left">
+                <a href="{% url 'product' product.slug %}" class="btn-link fs-6 text-uppercase item-anchor text-decoration-none">View Product</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if categories %}
+<div class="container">
+    <h2 class="mt-4 mb-3">Categories</h2>
+    <hr>
+    <div class="row">
+        {% for category in categories %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ category.name }}</h5>
+                    <a href="{% url 'category' category.slug %}" class="btn btn-primary">View Category</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+{% if sets %}
+<div class="container">
+    <h2 class="mt-4 mb-3">Sets</h2>
+    <hr>
+    <div class="row">
+        {% for set_item in sets %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                {% if set_item.image %}
+                <img src="{{ set_item.image.url }}" class="card-img-top" alt="{{ set_item.name }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ set_item.name }}</h5>
+                    <a href="{% url 'set' set_item.slug %}" class="btn btn-primary">View Set</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+{% if is_query and not products and not sets and not categories %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-info" role="alert">
+                No products found matching your search criteria.
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
