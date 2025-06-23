@@ -1,4 +1,4 @@
-from store.models import Product
+from store.models import Product, Profile
 
 
 class Cart():
@@ -7,6 +7,8 @@ class Cart():
         Initialize the cart with the request.
         """
         self.session = request.session
+        # Get request
+        self.request = request
 
         # Get current session if it exists
         cart = self.session.get('cart')
@@ -17,8 +19,31 @@ class Cart():
         # Make available globally
         self.cart = cart
 
+    def db_add(self, product, quantity):
+        """
+        Add a product to the cart with a specified quantity.
+        :param product: Product object to add.
+        :param quantity: Quantity of the product to add.
+        """
+        product_id = str(product)
+        product_qty = int(quantity)
+        if product_id in self.cart:
+            pass
+        else:
+            self.cart[product_id] = product_qty
+        self.session.modified = True
+        if self.request.user.is_authenticated:
+            current_user = Profile.objects.filter(
+                user__id=self.request.user.id
+            ).first()
+            carty = str(self.cart)
+            carty = carty.replace("\'", "\"")
+            current_user.old_cart = str(carty)
+
     def add(self, product_id, product_qty=1):
-        """Add a product to the cart or update its quantity."""
+        """
+        Add a product to the cart or update its quantity.
+        """
         # Ensure product_id is a string, and product_qty is an integer
         if hasattr(product_id, 'id'):
             product_id = str(product_id.id)
@@ -30,10 +55,18 @@ class Cart():
         except ValueError:
             product_qty = 1
 
-        # Store quantity as a dictionary to maintain consistent structure
-        self.cart[product_id] = {'quantity': product_qty}
-
-        self.save()
+        self.cart[product_id] = product_qty
+        self.session.modified = True
+        if self.request.user.is_authenticated:
+            # Get the current user
+            current_user = Profile.objects.filter(
+                user__id=self.request.user.id
+            ).first()
+            carty = str(self.cart)
+            carty = carty.replace("\'", "\"")
+            # Update the user's cart in the database
+            current_user.old_cart = str(carty)
+            current_user.save()
 
     def remove(self, product_id):
         """
@@ -43,7 +76,17 @@ class Cart():
         product_id = str(product_id)
         if product_id in self.cart:
             del self.cart[product_id]
-            self.session.modified = True
+        self.session.modified = True
+        if self.request.user.is_authenticated:
+            # Get the current user
+            current_user = Profile.objects.filter(
+                user__id=self.request.user.id
+            ).first()
+            carty = str(self.cart)
+            carty = carty.replace("\'", "\"")
+            # Update the user's cart in the database
+            current_user.old_cart = str(carty)
+            current_user.save()
         # No else block needed as per original code's pass
 
     def __len__(self):

@@ -5,6 +5,8 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django import forms
 from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
+import json
+from cart.cart import Cart
 
 
 # Function to handle product details view
@@ -100,6 +102,19 @@ def login_user(request):
         if user is not None:
             # Log the user in
             login(request, user)
+            # Update session cart from database
+            current_user = Profile.objects.get(
+                user__id=request.user.id
+            )
+            saved_cart = current_user.old_cart
+            if saved_cart:
+                # convert str to dict
+                converted_cart = json.loads(saved_cart)
+                cart = Cart(request)
+                for key,value in converted_cart.items():
+                    cart.db_add(product=key, quantity=value)
+            else:
+                request.session['cart'] = {}
             messages.success(request, 'Login successful!')
             return redirect('home')
         else:
