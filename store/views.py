@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Product, Category, Set, Profile
+from payment.models import ShippingAddress
+from payment.forms import ShippingForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -111,7 +113,7 @@ def login_user(request):
                 # convert str to dict
                 converted_cart = json.loads(saved_cart)
                 cart = Cart(request)
-                for key,value in converted_cart.items():
+                for key, value in converted_cart.items():
                     cart.db_add(product=key, quantity=value)
             else:
                 request.session['cart'] = {}
@@ -232,27 +234,39 @@ def update_password(request):
 
 def update_info(request):
     if request.user.is_authenticated:
-        # Account for potential mismatch between User and Profile IDs
-        # Ensure that the Profile instance is fetched correctly
-        current_user = Profile.objects.get(user__id=request.user.id)
-        user_info_form = UserInfoForm(
-            request.POST or None,
-            instance=current_user
+        profile = Profile.objects.get(user__id=request.user.id)
+        # Use get_or_create to handle users without a shipping address yet.
+        shipping_address, _ = (
+            ShippingAddress.objects.get_or_create(user__id=request.user.id)
         )
-        if user_info_form.is_valid():
-            user_info_form.save()
-            messages.success(
-                request, 'Your information has been updated successfully!'
+
+        if request.method == 'POST':
+            user_info_form = UserInfoForm(request.POST, instance=profile)
+            shipping_form = ShippingForm(
+                request.POST, instance=shipping_address
             )
+
+            # Both forms must be valid to save
+            if user_info_form.is_valid() and shipping_form.is_valid():
+                user_info_form.save()
+                shipping_form.save()
+                messages.success(
+                    request, 'Your information has been updated successfully!')
+                return redirect('update_info')
+            else:
+                # Display errors from both forms
+                for error in list(user_info_form.errors.values()):
+                    messages.error(request, error)
+                for error in list(shipping_form.errors.values()):
+                    messages.error(request, error)
         else:
-            # If the form is not valid, display the errors
-            for error in list(user_info_form.errors.values()):
-                messages.error(
-                    request,
-                    f'Error: {error}'
-                )
+            # For GET requests, populate forms with existing data
+            user_info_form = UserInfoForm(instance=profile)
+            shipping_form = ShippingForm(instance=shipping_address)
+
         return render(request, 'update_info.html', {
-            'user_form': user_info_form
+            'user_form': user_info_form,
+            'shipping_form': shipping_form
         })
     else:
         messages.error(
@@ -260,11 +274,11 @@ def update_info(request):
             'You need to be logged in to update your information.'
         )
         return redirect('login')
-    
+
 
 def search(request):
     """
-    This function handles the search functionality for products, categories and sets.
+    This function handles the search functionality
     """
     is_query = False
     products = None
@@ -280,10 +294,12 @@ def search(request):
             products = Product.objects.filter(name__icontains=search_query)
             categories = Category.objects.filter(name__icontains=search_query)
             sets = Set.objects.filter(name__icontains=search_query)
-            
+
             # Check if any results were found
-            found_results = products.exists() or categories.exists() or sets.exists()
-            
+            found_results = (
+                products.exists() or categories.exists() or sets.exists()
+            )
+
             if found_results:
                 return render(request, 'search.html', {
                     'products': products,
@@ -293,7 +309,9 @@ def search(request):
                     'is_query': is_query
                 })
             else:
-                messages.info(request, 'No results found matching your search.')
+                messages.info(
+                    request, 'No results found matching your search.'
+                )
         else:
             messages.error(request, 'Please enter a valid search term.')
     else:
