@@ -153,7 +153,7 @@ if USE_AWS:
             "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
             "OPTIONS": {
                 "location": MEDIAFILES_LOCATION,
-                "file_overwrite": False, # It's good practice to not overwrite media files
+                "file_overwrite": False,
             },
         },
         "staticfiles": {
