@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from store.models import Product, Category, Set
 from payment.models import Order, OrderItem
+from store.forms import ProductForm
 
 @user_passes_test(lambda u: u.is_superuser)
 def control_panel_home(request):
@@ -66,3 +67,81 @@ def mark_order_shipped(request, order_id):
         messages.error(request, "Order not found.")
     
     return redirect('control_panel_order_detail', order_id=order_id)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def products(request):
+    """
+    Render the products page in the control panel.
+    """
+    products = Product.objects.all().order_by('name')
+    return render(request, 'controlpanel/products.html', {
+        'products': products,
+    })
+
+@user_passes_test(lambda u: u.is_superuser)
+def add_product(request):
+    """
+    Add a new product in the control panel.
+    """
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES or None)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Product added successfully.")
+            return redirect('control_panel_products')
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = ProductForm()
+
+    return render(request, 'controlpanel/control_panel_add_product.html', {
+        'form': form,
+    })
+
+@user_passes_test(lambda u: u.is_superuser)
+def edit_product(request, product_id):
+    """
+    Edit a product in the control panel.
+    """
+    try:
+        product = Product.objects.get(id=product_id)
+    except Product.DoesNotExist:
+        messages.error(request, "Product not found.")
+        return redirect('control_panel_products')
+    
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES or None, instance=product)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Product updated successfully.")
+            return redirect('control_panel_products')
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = ProductForm(instance=product)
+
+    return render(request, 'controlpanel/edit_product.html', {
+        'product': product,
+        'form': form,
+    })
+
+@user_passes_test(lambda u: u.is_superuser)
+def confirm_delete_product(request, product_id):
+    """
+    Confirm deletion of a product in the control panel.
+    """
+    try:
+        product = Product.objects.get(id=product_id)
+    except Product.DoesNotExist:
+        messages.error(request, "Product not found.")
+        return redirect('control_panel_products')
+
+    if request.method == 'POST':
+        product.delete()
+        messages.success(request, "Product deleted successfully.")
+        return redirect('control_panel_products')
+
+    return render(request, 'controlpanel/confirm_delete_product.html', {
+        'product': product,
+    })

@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, SetPasswordForm
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile, Product, Category, Set
 
 
 class ChangePasswordForm(SetPasswordForm):
@@ -283,3 +283,36 @@ class UserInfoForm(forms.ModelForm):
             self.fields[field].widget.attrs['class'] = 'form-control'
             self.fields[field].label = ''
             self.fields[field].help_text = ''
+
+
+class ProductForm(forms.ModelForm):
+    """
+    Form for creating or updating a product.
+    This form is used in the control panel to manage products.
+    """
+    class Meta:
+        model = Product
+        fields = ['name', 'description', 'price', 'category', 'set', 'stock', 'image']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Product Name'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Product Description'
+            }),
+            'price': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Price'
+            }),
+            'category': forms.Select(attrs={'class': 'form-control'}),
+            'set': forms.Select(attrs={'class': 'form-control'}),
+            'image': forms.ClearableFileInput(attrs={'class': 'form-control-file'})
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(ProductForm, self).__init__(*args, **kwargs)
+        self.fields['category'].empty_label = "Select Category"
+        self.fields['set'].empty_label = "Select Set"
+
