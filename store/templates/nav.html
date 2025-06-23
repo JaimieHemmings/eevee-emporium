@@ -74,6 +74,11 @@
                     <li>
                       <a href="{% url 'update_user' %}" class="dropdown-item item-anchor">Account</a>
                     </li>
+                    {% if user.is_superuser %}
+                    <li>
+                      <a href="{% url 'control_panel_home' %}" class="dropdown-item item-anchor">Control Panel</a>
+                    </li>
+                    {% endif %}
                     <li>
                       <a href="{% url 'logout' %}" class="dropdown-item item-anchor">Log Out</a>
                     </li>
@@ -112,6 +117,11 @@
                   <li>
                     <a href="{% url 'update_user' %}" class="dropdown-item item-anchor">Account</a>
                   </li>
+                  {% if user.is_superuser %}
+                    <li>
+                      <a href="{% url 'control_panel_home' %}" class="dropdown-item item-anchor">Control Panel</a>
+                    </li>
+                  {% endif %}
                   <li>
                     <a href="{% url 'logout' %}" class="dropdown-item item-anchor">Log Out</a>
                   </li>

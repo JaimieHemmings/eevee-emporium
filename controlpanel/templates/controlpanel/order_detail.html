@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Control Panel{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <main role="main" class="col-12">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Order Details</h1>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Order #{{ order.id }}</h5>
+                    <p class="card-text">Customer: {{ order.full_name }}</p>
+                    <p class="card-text">Email: {{ order.email }}</p>
+                    <p class="card-text">Date Ordered: {{ order.date_ordered|date:"d-m-Y H:i" }}</p>
+                    <p class="card-text">Total Amount: £{{ order.amount_paid }}</p>
+                    <p class="card-text">Shipping Address: {{ order.shipping_address }}</p>
+                    <p class="card-text">Status:
+                        {% if order.shipped %}
+                            <span class="badge bg-success">Shipped</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        {% endif %}
+                    </p>
+                    <p class="card-text mb-0">Items:</p>
+                    <ul class="list-group mb-3">
+                        {% for item in order_items %}
+                            <li class="list-group-item">
+                                {{ item.quantity }} x {{ item.product.name }} - Price: £{{ item.price }}
+                            </li>
+                        {% empty %}
+                            <li class="list-group-item">No items in this order.</li>
+                        {% endfor %}
+                    </ul>
+                    <div class="d-flex justify-content-start gap-4">
+                        {% if not order.shipped %}
+                            <a href="{% url 'control_panel_mark_order_shipped' order.id %}" class="btn btn-success">Mark as Shipped</a>
+                        {% endif %}
+                        <a href="{% url 'control_panel_orders' %}" class="btn btn-primary">Back to Orders</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

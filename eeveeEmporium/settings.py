@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'store',  # Custom app for the store
     'cart',   # Custom app for the shopping cart
     'payment',  # Custom app for payment processing
+    'controlpanel',  # Custom app for the admin control panel
 ]
 
 MIDDLEWARE = [
@@ -108,6 +109,10 @@ USE_I18N = True
 
 USE_TZ = True
 
+# Default account functionality
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'
