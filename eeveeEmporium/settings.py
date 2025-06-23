@@ -124,17 +124,14 @@ LOGOUT_REDIRECT_URL = 'home'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STATIC_URL = "/static/"
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-
-if "USE_AWS_S3" in os.environ:
+if not DEBUG:
     print("Using S3")
 
     # cache control
@@ -158,13 +155,18 @@ if "USE_AWS_S3" in os.environ:
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/"
     MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/"
 
-    CSRF_TRUSTED_ORIGINS = [
-    'https://eeveeemporium-a0b363641244.herokuapp.com/',
-    'http://localhost:8000/',
-    'http://127.0.0.1:8000/',
+else:
+    print("Using local storage")
+
+    # Local static and media files
+    STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://eeveeemporium-a0b363641244.herokuapp.com',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
 ]
-
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
