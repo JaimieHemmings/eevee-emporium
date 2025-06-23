@@ -21,6 +21,8 @@ ALLOWED_HOSTS = [
     ".herokuapp.com",
     '127.0.0.1',
     'localhost',
+    'eeveeemporium.herokuapp.com',
+    '*.herokuapp.com',
     ]
 
 

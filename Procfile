@@ -1,1 +1,1 @@
-web: gunicorn eeveeEmporium.wsgi:application
+web: gunicorn eevee-emporium.wsgi:application
