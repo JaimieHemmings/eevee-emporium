@@ -143,18 +143,23 @@ if USE_AWS:
     AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME", "eu-west-1")
     AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
     AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+
+    STATICFILES_LOCATION = "static"
+    MEDIAFILES_LOCATION = "media"
+
     # Static and media files
     STORAGES = {
         "default": {
-            "BACKEND" : "storages.backends.s3boto3.S3StaticStorage",
+            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+            "OPTIONS": {
+                "location": MEDIAFILES_LOCATION,
+                "file_overwrite": False, # It's good practice to not overwrite media files
+            },
         },
-
-        "staticfiles":  {
-            "BACKEND" : "storages.backends.s3boto3.S3StaticStorage",
+        "staticfiles": {
+            "BACKEND": "storages.backends.s3boto3.S3StaticStorage",
         },
-}
-    STATICFILES_LOCATION = "static"
-    MEDIAFILES_LOCATION = "media"
+    }
 
     # Override static and media URLs in production
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/"
