@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
-from . import settings
+from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
@@ -8,5 +8,8 @@ urlpatterns = [
     path('', include('store.urls')),
     path('cart/', include('cart.urls')),
     path('payment/', include('payment.urls')),
-    path('control_panel/', include('controlpanel.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('controlpanel/', include('controlpanel.urls')),
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
