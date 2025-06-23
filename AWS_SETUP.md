@@ -72,11 +72,32 @@ Going back to the AWS Console, use the search functionality again to find the IA
 
 - Click "Policies" in the left side menu under "Access management"
 - Click "Create Policy"
-- Under "Service" select "S3"
-- Find the "Actions" button and click "import policy"
-- Choose "AmazonS3FullAccess" and click "Import policy" again.
-- Select the JSON visualisor and edit the "Resource" value from ```*``` to ```<BucketARN>/*```
-  - Where ```<BucketARN>``` is the ARN for your bucket.
+- Select the **JSON** tab and paste the following policy, replacing `<YOUR_BUCKET_NAME>` with the name of your S3 bucket on both `Resource` lines.
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowListBucket",
+            "Effect": "Allow",
+            "Action": "s3:ListBucket",
+            "Resource": "arn:aws:s3:::<YOUR_BUCKET_NAME>"
+        },
+        {
+            "Sid": "AllowObjectActions",
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:DeleteObject"
+            ],
+            "Resource": "arn:aws:s3:::<YOUR_BUCKET_NAME>/*"
+        }
+    ]
+}
+```
+
 - Click Next
 - Give the policy a recognisable name (and description if you'd like).
 - Click Create Policy.
