@@ -316,3 +316,24 @@ class ProductForm(forms.ModelForm):
         self.fields['category'].empty_label = "Select Category"
         self.fields['set'].empty_label = "Select Set"
 
+
+class CategoryForm(forms.ModelForm):
+    """
+    Form for creating or updating a category.
+    This form is used in the control panel to manage categories.
+    """
+    class Meta:
+        model = Category
+        fields = ['name']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Category Name'
+            })
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(CategoryForm, self).__init__(*args, **kwargs)
+        self.fields['name'].label = ''
+        self.fields['name'].help_text = ''
+

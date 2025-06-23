@@ -54,6 +54,11 @@ def process_order(request):
             
             OrderItem.objects.create(**order_item_data)
 
+            # Reduce product stock
+            prod_to_update = Product.objects.get(id=product['id'])
+            prod_to_update.stock -= product['quantity']
+            prod_to_update.save()
+
         messages.success(
             request,
             "Order placed successfully! Redirecting to homepage..."

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Confirm Delete Category{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <a href="{% url 'control_panel_manage_categories' %}" class="btn btn-primary mb-3">Back to Categories</a>
+        </div>
+    </div>
+    <div class="row">
+        <main role="main" class="col-12">
+            <h1 class="h2">Confirm Delete Category</h1>
+            <p>Are you sure you want to delete the category "{{ category.name }}"?</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete Category</button>
+                <a href="{% url 'control_panel_manage_categories' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </main>
+    </div>
+</div>
+{% endblock %}

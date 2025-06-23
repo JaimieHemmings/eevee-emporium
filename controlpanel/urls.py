@@ -43,4 +43,24 @@ urlpatterns = [
         views.confirm_delete_product,
         name='confirm_delete_product'
     ),
+    path(
+        'manage_categories/',
+        views.manage_categories,
+        name='control_panel_manage_categories'
+    ),
+    path(
+        'add_category/',
+        views.add_category,
+        name='control_panel_add_category'
+    ),
+    path(
+        'edit_category/<int:category_id>/',
+        views.edit_category,
+        name='control_panel_edit_category'
+    ),
+    path(
+        'delete_category/<int:category_id>/',
+        views.confirm_delete_category,
+        name='confirm_delete_category'
+    ),
 ]

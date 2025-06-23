@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Edit Category{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <a href="{% url 'control_panel_manage_categories' %}" class="btn btn-primary mb-3">Back to Categories</a>
+        </div>
+    </div>
+    <div class="row">
+        <main role="main" class="col-12">
+            <h1 class="h2">Edit Category</h1>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Update Category</button>
+            </form>
+        </main>
+    </div>
+</div>
+{% endblock %}
