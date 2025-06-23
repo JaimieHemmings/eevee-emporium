@@ -5,7 +5,6 @@ from store.models import Product
 from django.http import JsonResponse
 from django.contrib import messages
 
-
 def cart_summary(request):
     """
     Render the cart summary page.

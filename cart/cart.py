@@ -188,3 +188,12 @@ class Cart():
         """Save the cart data to the session."""
         self.session['cart'] = self.cart
         self.session.modified = True
+
+    def clear(self):
+        """
+        Remove the entire cart from the session.
+        """
+        # Delete the cart key from the session dictionary
+        if 'cart' in self.session:
+            del self.session['cart']
+            self.session.modified = True

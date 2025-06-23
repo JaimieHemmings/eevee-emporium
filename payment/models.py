@@ -1,8 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from store.models import Product
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
+import datetime
 
 
 class Order(models.Model):
@@ -14,16 +15,35 @@ class Order(models.Model):
     )
     full_name = models.CharField(max_length=255)
     email = models.EmailField(max_length=255)
-    ShippingAddress = models.TextField(max_length=5000)
+    shipping_address = models.TextField(max_length=5000)
     amount_paid = models.DecimalField(
         max_digits=10,
         decimal_places=2,
         default=0.00
     )
     date_ordered = models.DateTimeField(auto_now_add=True)
+    shipped = models.BooleanField(default=False)
+    date_shipped = models.DateTimeField(
+        auto_now=False,
+        auto_now_add=False,
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return f"Order - {str(self.id)}"
+    
+
+@receiver(pre_save, sender=Order)
+def set_date_shipped(sender, instance, **kwargs):
+    """
+    Signal to set the date_shipped field to the current date and time
+    when the order is marked as shipped.
+    """
+    if instance.shipped and not instance.date_shipped:
+        instance.date_shipped = datetime.datetime.now()
+    elif not instance.shipped:
+        instance.date_shipped = None
 
 
 class OrderItem(models.Model):   

@@ -1,7 +1,72 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from cart.cart import Cart
-from payment.forms import ShippingForm
+from payment.forms import ShippingForm, PaymentForm
 from payment.models import ShippingAddress
+from django.contrib import messages
+from payment.models import Order, OrderItem
+from django.contrib.auth.models import User
+from store.models import Product
+
+
+def process_order(request):
+    """
+    Process the order and handle payment.
+    """
+    if request.POST:
+        cart = Cart(request)
+        cart_products = cart.get_prods()
+        total_price = cart.total()
+        my_shipping = request.session.get('shipping_info')
+
+        # Combine shipping address parts into a single string
+        address_parts = [
+            my_shipping.get('shipping_address1'),
+            my_shipping.get('shipping_address2'),
+            my_shipping.get('shipping_city'),
+            my_shipping.get('shipping_county'),
+            my_shipping.get('shipping_postcode'),
+            my_shipping.get('shipping_country'),
+        ]
+        shipping_address = ",\n".join(filter(None, address_parts))
+
+        # Create Order
+        order_data = {
+            'full_name': my_shipping.get('shipping_full_name'),
+            'email': my_shipping.get('shipping_email'),
+            'shipping_address': shipping_address,
+            'amount_paid': total_price,
+        }
+        if request.user.is_authenticated:
+            order_data['user'] = request.user
+
+        create_order = Order.objects.create(**order_data)
+
+        # Create Order Items
+        for product in cart_products:
+            order_item_data = {
+                'order': create_order,
+                'product_id': product['id'],
+                'price': product['price'],
+                'quantity': product['quantity'],
+            }
+            if request.user.is_authenticated:
+                order_item_data['user'] = request.user
+            
+            OrderItem.objects.create(**order_item_data)
+
+        messages.success(
+            request,
+            "Order placed successfully! Redirecting to homepage..."
+        )
+        # Clear the cart
+        cart.clear()
+        return redirect('home')
+    else:
+        messages.error(
+            request,
+            "Access Denied! Redirecting to homepage..."
+        )
+        return redirect('home')
 
 
 def payment_success(request):
@@ -18,15 +83,16 @@ def checkout(request):
     cart = Cart(request)
     cart_products = cart.get_prods()
     total_price = cart.total()
+    shipping_form = ShippingForm()
 
     if request.user.is_authenticated:
-        shipping_user = ShippingAddress.objects.get(
-            user__id = request.user.id
-        )
+        shipping_user = ShippingAddress.objects.filter(
+            user=request.user
+        ).last()
 
         shipping_form = ShippingForm(
             request.POST or None,
-            instance = shipping_user
+            instance=shipping_user
         )
         return render(
             request,
@@ -47,3 +113,49 @@ def checkout(request):
                 "shipping_form": shipping_form,
             }
         )
+
+
+def billing_info(request):
+    """
+    Render the billing information page.
+    """
+    if request.method == 'POST':
+        cart = Cart(request)
+        cart_products = cart.get_prods()
+        total_price = cart.total()
+        billing_form = PaymentForm()
+
+        # Create session for shipping info
+        my_shipping = request.POST
+        request.session['shipping_info'] = my_shipping
+
+        # Check user is authenticated
+        if request.user.is_authenticated:
+            return render(
+                request,
+                'payment/billing_info.html',
+                {
+                    "cart_products": cart_products,
+                    "total_price": total_price,
+                    "shipping_info": request.POST,
+                    "billing_form": billing_form,
+                }
+            )
+        else:
+            return render(
+                request,
+                'payment/billing_info.html',
+                {
+                    "cart_products": cart_products,
+                    "total_price": total_price,
+                    "shipping_info": request.POST,
+                    "billing_form": billing_form,
+                }
+            )
+
+    else:
+        messages.error(
+            request,
+            "Access Denied! Redirecting to homepage..."
+        )
+        return redirect('home')

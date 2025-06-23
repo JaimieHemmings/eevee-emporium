@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    Payment Success
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12 text-center mb-4">
+            <h1>Billing Info</h1>
+            <p>Enter your payment information</p>
+        </div>  
+    </div>
+    <div class="row mb-5">
+        <div class="col-md-8 mb-5">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Payment Information</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{% url 'process_order' %}">
+                        {% csrf_token %}
+                        {{ billing_form.as_p }}
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary">Submit Payment</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-right d-flex-col justify-content-start">
+                    <p class="card-text fw-bold">Total to pay: £{{ total_price }}</p>
+                    <p class="card-text">We do not store your card information.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Shipping Address:</h5>
+                    <ul class="list-unstyled mb-3">
+                        <li>
+                            {{ shipping_info.shipping_full_name }}    
+                        </li>
+                        <li>
+                            {{ shipping_info.shipping_email }}
+                        </li>
+                        {% if shipping_info.shipping_phone_number %}
+                        <li>
+                            {{ shipping_info.shipping_phone_number }}
+                        </li>
+                        {% endif %}
+                        <li>
+                            {{ shipping_info.shipping_address1 }}
+                        </li>
+                        {% if shipping_info.shipping_address2 %}
+                            <li>
+                                {{ shipping_info.shipping_address2 }}
+                            </li>
+                        {% endif %}
+                        <li>
+                            {{ shipping_info.shipping_city }}
+                        </li>
+                        <li>
+                            {{ shipping_info.shipping_county }}
+                        </li>
+                        <li>
+                            {{ shipping_info.shipping_postcode }}
+                        </li>
+                        <li>
+                            {{ shipping_info.shipping_country }}
+                        </li>
+                    </ul>
+                    <a href="{% url 'checkout' %}" class="btn btn-secondary">Edit Shipping Address</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
