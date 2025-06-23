@@ -8,4 +8,9 @@ urlpatterns = [
         views.payment_success,
         name='payment_success'
     ),
+    path(
+        'checkout',
+        views.checkout,
+        name='checkout'
+    ),
 ]

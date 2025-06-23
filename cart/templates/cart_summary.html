@@ -59,6 +59,10 @@ Welcome to Eevee Emporium, your ultimate destination for Pokémon cards and coll
                     </tr>
                 </tfoot>
             </table>
+            <div class="text-center">
+                <a href="{% url 'checkout' %}" class="btn btn-primary">Proceed to Checkout</a>
+                <a href="{% url 'home' %}" class="btn btn-secondary">Continue Shopping</a>
+            </div>
             {% else %}
             <div class="alert alert-info text-center" role="alert">
                 Your cart is empty. Start shopping now!

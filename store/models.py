@@ -3,7 +3,7 @@ import datetime
 from django.utils.text import slugify
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
-
+from django.dispatch import receiver
 
 class Profile(models.Model):
     """
@@ -25,20 +25,22 @@ class Profile(models.Model):
         return self.user.username
 
 
-# Create a user profile automatically when a User is created
+@receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
+# Create a user profile automatically when a User is created
     """
     Signal to create a Profile instance when a User is created.
     """
     if created:
         user_profile = Profile(user=instance)
         user_profile.save()
-    # Connect the create_profile function to the post_save signal of User
-    post_save.connect(create_profile, sender=User)
 
 
 # Categories of products
 class Category(models.Model):
+    """
+    Category model to classify products.
+    """
     name = models.CharField(max_length=50)
     slug = models.SlugField(
         max_length=100, unique=True, blank=True, null=True, editable=False
