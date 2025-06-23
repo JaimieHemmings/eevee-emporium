@@ -1,21 +1,21 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Control Panel - Add Product{% endblock %}
+{% block title %}Edit Set{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row mt-5">
+<div class="container mt-5">
+    <div class="row">
         <div class="col-12">
-            <a href="{% url 'control_panel_products' %}" class="btn btn-primary mb-3">Back to Products</a>
+            <a href="{% url 'control_panel_manage_sets' %}" class="btn btn-primary mb-3">Back to Sets</a>
         </div>
     </div>
     <div class="row">
         <main role="main" class="col-12">
-            <h1 class="h2">Add Category</h1>
+            <h1 class="h2">Edit Set</h1>
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <button type="submit" class="btn btn-primary">Add Category</button>
+                <button type="submit" class="btn btn-primary">Update Set</button>
             </form>
         </main>
     </div>

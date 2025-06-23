@@ -337,3 +337,24 @@ class CategoryForm(forms.ModelForm):
         self.fields['name'].label = ''
         self.fields['name'].help_text = ''
 
+
+class SetForm(forms.ModelForm):
+    """
+    Form for creating or updating a product set.
+    This form is used in the control panel to manage sets of products.
+    """
+    class Meta:
+        model = Set
+        fields = ['name', 'image']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Set Name'
+            }),
+            'image': forms.ClearableFileInput(attrs={'class': 'form-control-file'})
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(SetForm, self).__init__(*args, **kwargs)
+        self.fields['name'].label = ''
+        self.fields['name'].help_text = ''

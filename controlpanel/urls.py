@@ -63,4 +63,24 @@ urlpatterns = [
         views.confirm_delete_category,
         name='confirm_delete_category'
     ),
+    path(
+        'manage_sets/',
+        views.manage_sets,
+        name='control_panel_manage_sets'
+    ),
+    path(
+        'manage_sets/add_set/',
+        views.add_set,
+        name='control_panel_add_set'
+    ),
+    path(
+        'manage_sets/edit_set/<int:set_id>/',
+        views.edit_set,
+        name='control_panel_edit_set'
+    ),
+    path(
+        'manage_sets/delete_set/<int:set_id>/',
+        views.confirm_delete_set,
+        name='confirm_delete_set'
+    ),
 ]

@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from store.models import Product, Category, Set
 from payment.models import Order, OrderItem
-from store.forms import ProductForm, CategoryForm
+from store.forms import ProductForm, CategoryForm, SetForm
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -229,4 +229,85 @@ def confirm_delete_category(request, category_id):
 
     return render(request, 'controlpanel/confirm_delete_category.html', {
         'category': category,
+    })
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def manage_sets(request):
+    """
+    Render the manage sets page in the control panel.
+    """
+    sets = Set.objects.all().order_by('name')
+    return render(request, 'controlpanel/manage_sets.html', {
+        'sets': sets,
+    })
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def add_set(request):
+    """
+    Add a new set in the control panel.
+    """
+    if request.method == 'POST':
+        form = SetForm(request.POST, request.FILES or None)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Set added successfully.")
+            return redirect('control_panel_manage_sets')
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = SetForm()
+
+    return render(request, 'controlpanel/add_set.html', {
+        'form': form,
+    })
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def edit_set(request, set_id):
+    """
+    Edit a set in the control panel.
+    """
+    try:
+        set_instance = Set.objects.get(id=set_id)
+    except Set.DoesNotExist:
+        messages.error(request, "Set not found.")
+        return redirect('control_panel_manage_sets')
+
+    if request.method == 'POST':
+        form = SetForm(request.POST, request.FILES or None, instance=set_instance)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Set updated successfully.")
+            return redirect('control_panel_manage_sets')
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = SetForm(instance=set_instance)
+
+    return render(request, 'controlpanel/edit_set.html', {
+        'form': form,
+        'set': set_instance,
+    })
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def confirm_delete_set(request, set_id):
+    """
+    Confirm deletion of a set in the control panel.
+    """
+    try:
+        set_instance = Set.objects.get(id=set_id)
+    except Set.DoesNotExist:
+        messages.error(request, "Set not found.")
+        return redirect('control_panel_manage_sets')
+
+    if request.method == 'POST':
+        set_instance.delete()
+        messages.success(request, "Set deleted successfully.")
+        return redirect('control_panel_manage_sets')
+
+    return render(request, 'controlpanel/confirm_delete_set.html', {
+        'set': set_instance,
     })
