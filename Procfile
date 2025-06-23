@@ -1,2 +1,2 @@
-release: python manage.py collectstatic --noinput && python manage.py migrate
+release: echo "Release command is running!" && ls -la
 web: gunicorn eeveeEmporium.wsgi:application
