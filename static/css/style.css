@@ -1096,9 +1096,9 @@ a {
 }
 
 .swiper-pagination-bullet {
-  width: 12px;
-  height: 12px;
-  margin-right: 10px;
+  width: 18px;
+  height: 18px;
+  margin-right: 18px;
 }
 
 @media only screen and (max-width: 1199px) {
