@@ -1687,3 +1687,7 @@ form p {
   color: #721c24;
   border-color: #f5c6cb;
 }
+
+p {
+  color: #111;
+}
