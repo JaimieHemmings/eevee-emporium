@@ -2,6 +2,8 @@
 
 Eevee Emporium is my submission for the Code Institute Milestone 4 project. It is a full-stack e-commerce platform built using the Django framework, designed for Pokémon enthusiasts. The store allows users to browse, purchase, and manage orders for a variety of Pokémon-related items, including trading cards, accessories, and merchandise. The project leverages Django's robust back-end capabilities to handle product management, user authentication, and a secure checkout process. A key architectural decision was to utilize Django's built-in authentication system to provide a secure and streamlined user experience, focusing on core functionalities without the need for external packages.
 
+More information about my reasoning to avoid AllAuth can be found [Here.](/ACCOUNTS.md)
+
 ![image](documentation/screenshot.png)
 
 View the Website [Here.](https://eeveeemporium-a0b363641244.herokuapp.com/)
@@ -103,6 +105,10 @@ Based on the premise of creating a minimally viable product I have decided to fo
 Below are diagrams illustrating the pages that are accessible for users based on their session state (guest/logged in guest/admin), any page not listed in a diagram is designed not to be accessible by a user.
 
 # Deployment and Local Development
+
+## AWS S3 Set up
+
+Please refer to the [AWS Setup](/AWS_SETUP.md) instructions.
 
 ## Deployment to Heroku
 
