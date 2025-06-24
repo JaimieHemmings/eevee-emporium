@@ -83,7 +83,7 @@ def process_order(request):
                 prod_to_update.save()
 
             # Now send the email ONCE, after all items are created
-            body = render_to_string('order_confirmation_email.txt', {
+            body = render_to_string('email_templates/order_confirmation_email.txt', {
                 'full_name': my_shipping.get('shipping_full_name'),
                 'order_id': create_order.id,
                 'items': order_items,
