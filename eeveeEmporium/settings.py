@@ -114,13 +114,9 @@ DATABASES = {
     'default': dj_database_url.parse(config('DATABASE_URL'))
 }
 
-# Database performance optimizations
+# Database performance optimizations (simplified for deployment)
 if not DEBUG:
     DATABASES['default']['CONN_MAX_AGE'] = 60  # Connection pooling
-    DATABASES['default']['OPTIONS'] = {
-        'MAX_CONNS': 20,
-        'CONN_HEALTH_CHECKS': True,
-    }
 
 # Logging for database queries (only in DEBUG mode)
 if DEBUG:

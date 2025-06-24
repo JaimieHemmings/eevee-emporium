@@ -51,8 +51,59 @@ python manage.py collectstatic --noinput
 ## If Deployment Still Fails
 
 1. Check Heroku logs: `heroku logs --tail`
-2. Disable performance features temporarily by commenting out:
+2. **Database Connection Issues**: 
+   - Error: `invalid connection option "MAX_CONNS"` - **FIXED**: Removed invalid PostgreSQL options
+3. Disable performance features temporarily by commenting out:
    - Cache middleware in MIDDLEWARE
    - Compressor in INSTALLED_APPS
-3. Use basic configuration for initial deployment
-4. Re-enable features one by one
+4. Use basic configuration for initial deployment
+5. Re-enable features one by one
+
+## Common Error Fixes
+
+### Database Connection Error
+```
+django.db.utils.ProgrammingError: invalid dsn: invalid connection option "MAX_CONNS"
+```
+**Solution**: Removed invalid PostgreSQL connection options. Only `CONN_MAX_AGE` is valid.
+
+### Static Files Issues
+```
+Error: Missing staticfiles
+```
+**Solution**: Added `collectstatic --noinput` to Procfile release command.
+
+### Template Loading Issues
+```
+TemplateDoesNotExist or loader conflicts
+```
+**Solution**: Fixed APP_DIRS vs loaders configuration conflict.
+
+## Quick Fix for Current Error - RESOLVED ✅
+
+The database connection error has been **FIXED**:
+
+**Problem**: 
+```
+django.db.utils.ProgrammingError: invalid dsn: invalid connection option "MAX_CONNS"
+```
+
+**Solution**: Removed invalid PostgreSQL database options. The configuration now only uses valid options:
+```python
+# FIXED: Only valid PostgreSQL options
+DATABASES = {
+    'default': dj_database_url.parse(config('DATABASE_URL'))
+}
+
+if not DEBUG:
+    DATABASES['default']['CONN_MAX_AGE'] = 60  # Valid option
+```
+
+## Deploy Again - Ready to Deploy! 🚀
+
+Your configuration is now fixed and ready for deployment:
+```bash
+git add .
+git commit -m "Fix PostgreSQL database configuration for Heroku"
+git push heroku main
+```
