@@ -12,7 +12,7 @@ from django.conf import settings
 
 # Set up Stripe
 stripe.public_api_key = settings.STRIPE_PUBLIC_KEY
-stripe.private_api_key = settings.STRIPE_PRIVATE_KEY
+stripe.api_key = settings.STRIPE_PRIVATE_KEY
 
 
 
