@@ -1068,6 +1068,8 @@ a {
 
 .testimonials .review-title {
   font-size: 14px;
+  color: #111;
+  font-weight: 700;
 }
 
 .testimonial-swiper .swiper-slide {
@@ -1689,5 +1691,9 @@ form p {
 }
 
 p {
+  color: #111;
+}
+
+.product-button a {
   color: #111;
 }

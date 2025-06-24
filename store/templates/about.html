@@ -10,7 +10,7 @@
   <div class="container-fluid px-0 mb-5 position-relative">
       <div class="text-center text-white">
         <h1 class="display-4 fw-bold">About Eevee Emporium</h1>
-        <p class="lead">Bringing the magic of Eeveelutions to trainers everywhere</p>
+        <p class="lead text-white">Bringing the magic of Eeveelutions to trainers everywhere</p>
       </div>
   </div>
 </section>
@@ -38,7 +38,7 @@
         <div class="col-md-4">
           <div class="card h-100 border-0 shadow-sm">
             <div class="card-body text-center p-4">
-              <h3 class="h4 card-title">Quality</h3>
+              <h3 class="h4 card-title text-black">Quality</h3>
               <p class="card-text">Every item in our collection meets rigorous standards for authenticity and craftsmanship, just like a well-trained Eevee.</p>
             </div>
           </div>
@@ -46,7 +46,7 @@
         <div class="col-md-4">
           <div class="card h-100 border-0 shadow-sm">
             <div class="card-body text-center p-4">
-              <h3 class="h4 card-title">Community</h3>
+              <h3 class="h4 card-title text-black">Community</h3>
               <p class="card-text">We foster a welcoming community of collectors and fans, bringing people together through our shared love of Eeveelutions.</p>
             </div>
           </div>
@@ -54,7 +54,7 @@
         <div class="col-md-4">
           <div class="card h-100 border-0 shadow-sm">
             <div class="card-body text-center p-4">
-              <h3 class="h4 card-title">Adaptability</h3>
+              <h3 class="h4 card-title text-black">Adaptability</h3>
               <p class="card-text">Like Eevee itself, we continuously evolve our selection and services to meet the changing needs of our customers.</p>
             </div>
           </div>
@@ -71,7 +71,7 @@
         <div class="card h-100 border-0 shadow-sm">
           <img src="{% static 'images/people/Alex.jpg' %}" class="card-img-top" alt="Team Member">
           <div class="card-body text-center">
-            <h5 class="card-title">Alex Johnson</h5>
+            <h5 class="card-title text-black">Alex Johnson</h5>
             <p class="text-muted">Founder & Flareon Enthusiast</p>
             <p class="card-text">Alex started collecting Pokémon cards at age 7 and never stopped.</p>
           </div>
@@ -81,7 +81,7 @@
         <div class="card h-100 border-0 shadow-sm">
           <img src="{% static 'images/people/Jamie.jpg' %}" class="card-img-top" alt="Team Member">
           <div class="card-body text-center">
-            <h5 class="card-title">Jamie Lee</h5>
+            <h5 class="card-title text-black">Jamie Lee</h5>
             <p class="text-muted">Merchandise Director & Vaporeon Fan</p>
             <p class="card-text">Jamie scours the world for the rarest and most beautiful Eevee products.</p>
           </div>
@@ -91,7 +91,7 @@
         <div class="card h-100 border-0 shadow-sm">
           <img src="{% static 'images/people/Sam.jpg' %}" class="card-img-top" alt="Team Member">
           <div class="card-body text-center">
-            <h5 class="card-title">Sam Rivera</h5>
+            <h5 class="card-title text-black">Sam Rivera</h5>
             <p class="text-muted">Community Manager & Umbreon Lover</p>
             <p class="card-text">Sam organizes our events and keeps our social media communities thriving.</p>
           </div>
@@ -101,7 +101,7 @@
         <div class="card h-100 border-0 shadow-sm">
           <img src="{% static 'images/people/Taylor.jpg' %}" class="card-img-top" alt="Team Member">
           <div class="card-body text-center">
-            <h5 class="card-title">Taylor Kim</h5>
+            <h5 class="card-title text-black">Taylor Kim</h5>
             <p class="text-muted">Customer Experience & Sylveon Enthusiast</p>
             <p class="card-text">Taylor ensures every customer has a magical experience with us.</p>
           </div>
@@ -120,13 +120,13 @@
         <div class="position-absolute bg-black opacity-75 top-0 start-0 w-100 h-100"></div>
         <div class="container text-center position-relative z-2">
             <h2 class="mb-4">Visit Our Flagship Store</h2>
-            <p class="lead mb-4">Come see our collection in person and meet fellow Eevee enthusiasts!</p>
+            <p class="lead mb-4 text-white">Come see our collection in person and meet fellow Eevee enthusiasts!</p>
             <address class="mb-4">
-                <p class="mb-1">123 Pokémon Plaza, Celadon City</p>
-                <p class="mb-1">Open daily: 10am - 8pm</p>
+                <p class="mb-1 text-white">123 Pokémon Plaza, Celadon City</p>
+                <p class="mb-1 text-white">Open daily: 10am - 8pm</p>
                 <p>Phone: (555) 123-4567</p>
             </address>
-            <a href="#" class="btn btn-light btn-lg">Contact Us</a>
+            <a href="{% url 'contact' %}" class="btn btn-light btn-lg">Contact Us</a>
         </div>
     </section>
 {% endblock %}
