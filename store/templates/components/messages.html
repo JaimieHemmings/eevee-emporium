@@ -44,11 +44,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 100);
         
         // Auto-close after 5 seconds
-        // timeoutId = setTimeout(() => {
-        //     if (!isHovered) {
-        //         closeToast(toast);
-        //     }
-        // }, 5000);
+        timeoutId = setTimeout(() => {
+            if (!isHovered) {
+                closeToast(toast);
+            }
+        }, 5000);
         
         // Pause on hover
         toast.addEventListener('mouseenter', function() {

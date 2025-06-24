@@ -14,19 +14,17 @@ DEBUG_STATE = config('DEBUG', default=True, cast=bool)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = DEBUG_STATE
 
-
-
 # Email settings
 if DEBUG_STATE != True:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_HOST = os.environ.get('MAILGUN_SMTP_SERVER', 'smtp.mailgun.org')
-    EMAIL_PORT = int(os.environ.get('MAILGUN_SMTP_PORT', 587))
-    EMAIL_HOST_USER = os.environ.get('MAILGUN_SMTP_LOGIN')
-    EMAIL_HOST_PASSWORD = os.environ.get('MAILGUN_SMTP_PASSWORD')
     EMAIL_USE_TLS = True
+    EMAIL_PORT = 587
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
     # Default "from" email address
-    DEFAULT_FROM_EMAIL = 'Eevee Emporium <noreply@eeveeemporium.com>'
+    DEFAULT_FROM_EMAIL = 'noreply@eeveeemporium.com'
     SERVER_EMAIL = DEFAULT_FROM_EMAIL
 else:
     # Use console backend for development
