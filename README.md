@@ -6,6 +6,122 @@ Eevee Emporium is my submission for the Code Institute Milestone 4 project. It i
 
 View the Website [Here.](https://eeveeemporium-a0b363641244.herokuapp.com/)
 
+## UX Developments
+
+### Strategy
+
+#### Project Goals
+
+    Develop a full-stack e-commerce website with full CRUD functionality.
+    Guests can browse products, view details, and add items to the cart.
+    Users can create an account, log in, and manage their personal profile and order history.
+    Registered users can complete a secure checkout process to purchase items.
+    Admins have full CRUD functionality for products, categories, and can manage all user orders.
+    The website will be fully responsive, providing a seamless experience on all device sizes.
+    Implement robust error handling and user feedback to ensure a smooth user journey.
+    Ensure a clear and intuitive user interface for easy navigation and product discovery.
+
+#### User Demographic
+
+    Pokémon fans and collectors of all ages.
+    Individuals looking to purchase Pokémon trading cards, merchandise, and accessories.
+    Gift shoppers looking for Pokémon-related items.
+    Potential employers evaluating full-stack development skills.
+
+### User Stories
+
+#### First-Time Visitor / Guest Goals
+
+As a first-time visitor, I want to be able to:
+
+    Immediately understand the site is an e-commerce store for Pokémon products.
+    Easily navigate the site and browse through different product categories.
+    Search for specific products.
+    View detailed information and images for each product.
+    Add products to my shopping bag.
+    Easily register for a new account.
+
+#### Registered User Goals
+
+As a registered user, I want to be able to:
+
+    Securely log in and out of my account.
+    View and update my personal information and shipping details.
+    View my past order history.
+    Proceed through a secure and simple checkout process to buy items in my bag.
+    Receive an order confirmation after purchase.
+
+#### Site Admin Goals
+
+As a site admin, I want to be able to:
+
+    Add new products to the store, including details like name, description, price, and image.
+    Edit existing product information.
+    Delete products from the store.
+    View and manage all customer orders.
+    Manage product categories to organize the storefront.
+
+### Scope
+
+#### Functionality Planning
+
+When planning the scope of the project I created a Viability Analysis of the features I wished to add. This would allow me to prioritise the most critical features and defer the development of lesser functionality to a later date. Below is that table:
+
+| #   | Feature                                | Importance | Viability |
+| --- | -------------------------------------- | ---------- | --------- |
+| 1   | Product CRUD Functionality (Admin)     | 5          | 5         |
+| 2   | User Registration & Login              | 5          | 5         |
+| 3   | Shopping Cart Functionality            | 5          | 5         |
+| 4   | Secure Checkout with Stripe            | 5          | 5         |
+| 5   | User Profile & Order History           | 4          | 5         |
+| 6   | Product Search & Filtering             | 4          | 4         |
+| 7   | Product Category Management (Admin)    | 4          | 5         |
+| 8   | Responsive Design                      | 5          | 5         |
+| 9   | User Action Validation & Feedback      | 5          | 5         |
+| 10  | Product Reviews & Ratings              | 3          | 4         |
+| 11  | Stock/Inventory Management             | 4          | 4         |
+| 12  | Wishlist Functionality                 | 2          | 3         |
+| 13  | Admin Dashboard for Order Management   | 5          | 5         |
+
+Based on the premise of creating a minimally viable product I have decided to focus on implementing only the core functionality for the application to meet the minimum required specifications for functionality. This means on the initial development sprint I will be implementing features 1, 2, 3, 4, 7 and 13.
+
+#### Functionality Requirements
+
+- Clean and thematically cohesive design
+- Functional and aesthetic presentation of Products
+- Comprehensive inventory management to add, edit and delete items
+- Login/logout functionality
+- Manage profile
+- Full CRUD functionality
+- Defensive programming usage to safeguard the database from malicious or erroneous input
+- Appropriate handling of error messages
+
+# Structure
+
+## Topology Diagrams
+
+Below are diagrams illustrating the pages that are accessible for users based on their session state (guest/logged in guest/admin), any page not listed in a diagram is designed not to be accessible by a user.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 install virtual environment:
 ```python -m venv virt```
 
