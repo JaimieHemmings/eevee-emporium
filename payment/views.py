@@ -6,6 +6,12 @@ from django.contrib import messages
 from payment.models import Order, OrderItem
 from django.contrib.auth.models import User
 from store.models import Product
+import stripe
+from django.conf import settings
+
+# Set up Stripe
+stripe_public_key = settings.STRIPE_SECRET_KEY
+strie_secret_key = settings.STRIPE_SECRET_KEY
 
 
 def process_order(request):
@@ -29,43 +35,67 @@ def process_order(request):
         ]
         shipping_address = ",\n".join(filter(None, address_parts))
 
-        # Create Order
-        order_data = {
-            'full_name': my_shipping.get('shipping_full_name'),
-            'email': my_shipping.get('shipping_email'),
-            'shipping_address': shipping_address,
-            'amount_paid': total_price,
-        }
-        if request.user.is_authenticated:
-            order_data['user'] = request.user
+        payment_token = request.POST.get('stripeToken')
 
-        create_order = Order.objects.create(**order_data)
+        try:
+            # Create a charge using Stripe
+            charge = stripe.Charge.create(
+                amount=int(total_price * 100),
+                currency='gbp',
+                description='Eevee Emporium Order',
+                source=payment_token,
+            )
 
-        # Create Order Items
-        for product in cart_products:
-            order_item_data = {
-                'order': create_order,
-                'product_id': product['id'],
-                'price': product['price'],
-                'quantity': product['quantity'],
+            # Create Order
+            order_data = {
+                'full_name': my_shipping.get('shipping_full_name'),
+                'email': my_shipping.get('shipping_email'),
+                'shipping_address': shipping_address,
+                'amount_paid': total_price,
             }
             if request.user.is_authenticated:
-                order_item_data['user'] = request.user
-            
-            OrderItem.objects.create(**order_item_data)
+                order_data['user'] = request.user
 
-            # Reduce product stock
-            prod_to_update = Product.objects.get(id=product['id'])
-            prod_to_update.stock -= product['quantity']
-            prod_to_update.save()
+            create_order = Order.objects.create(**order_data)
 
-        messages.success(
-            request,
-            "Order placed successfully! Redirecting to homepage..."
-        )
-        # Clear the cart
-        cart.clear()
-        return redirect('home')
+            # Create Order Items
+            for product in cart_products:
+                order_item_data = {
+                    'order': create_order,
+                    'product_id': product['id'],
+                    'price': product['price'],
+                    'quantity': product['quantity'],
+                }
+                if request.user.is_authenticated:
+                    order_item_data['user'] = request.user
+
+                OrderItem.objects.create(**order_item_data)
+
+                # Reduce product stock
+                prod_to_update = Product.objects.get(id=product['id'])
+                prod_to_update.stock -= product['quantity']
+                prod_to_update.save()
+
+            messages.success(
+                request,
+                "Order placed successfully! Redirecting to homepage..."
+            )
+            # Clear the cart
+            cart.clear()
+            return redirect('home')
+
+        except stripe.error.StripeError as e:
+            # Card declined
+            messages.error(request, str(e))
+            return redirect('billing_info')
+        except Exception as e:
+            # Other errors
+            messages.error(
+                request,
+                "An error occurred while processing your order."
+                "Please try again."
+            )
+            return redirect('billing_info')
     else:
         messages.error(
             request,
@@ -134,29 +164,14 @@ def billing_info(request):
         my_shipping = request.POST
         request.session['shipping_info'] = my_shipping
 
-        # Check user is authenticated
-        if request.user.is_authenticated:
-            return render(
-                request,
-                'payment/billing_info.html',
-                {
-                    "cart_products": cart_products,
-                    "total_price": total_price,
-                    "shipping_info": request.POST,
-                    "billing_form": billing_form,
-                }
-            )
-        else:
-            return render(
-                request,
-                'payment/billing_info.html',
-                {
-                    "cart_products": cart_products,
-                    "total_price": total_price,
-                    "shipping_info": request.POST,
-                    "billing_form": billing_form,
-                }
-            )
+        context = {
+            "cart_products": cart_products,
+            "total_price": total_price,
+            "shipping_info": request.POST,
+            "billing_form": billing_form,
+            "stripe_publishable_key": stripe_public_key
+        }
+        return render(request, 'payment/billing_info.html', context)
 
     else:
         messages.error(
