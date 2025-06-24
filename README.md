@@ -118,29 +118,6 @@ The ecommerce site runs from a single database with multiple tables.
 
 Only users with admin privileges can modify or delete any data. All users can create and read data. The diagram below (ERD) shows the relationships between these tables.
 
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-
 # Skeleton
 
 ## Wireframes
@@ -149,27 +126,6 @@ Only users with admin privileges can modify or delete any data. All users can cr
 - About Page
 - Contact Page
 - Search Page
-
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
 
 # Features
 
@@ -206,6 +162,62 @@ Below is a table of CRUD functionality for each relevant page:
 | Login              |                    | Check password hash                         |                                 |                   |
 | Register           | User profile       |                                             |                                 |                   |
 | Search             |                    | Fetch Search Results                        |                                 |                   |
+
+# Testing
+
+Comprehensive testing Documentation can be found in [Testing](/Testing.md)
+
+# Defensive Programming
+
+Defensive programming has been a core concept driving the development of this webiste and its functionality from the beginning. In order to make a reasonable attempt at securing the website I have implemented the following:
+
+- Privileged pages check the user role and session before rendering and redirect the user if criteria for the page isn't met.
+
+# Error Handling
+
+The root of the templates folder includes several fallback templates for errors such as 404 and 500 ensuring errors are gracefully caught and the user is redirected.
+
+# Technologies Used
+
+- Languages:
+    - HTML
+    - CSS3
+    - JavaScript
+        - JQuery
+    - Python
+- Django
+- PostgreSQL
+- PIP
+- Git
+- BootStrap 5
+- Heroku
+
+# Future Implementations
+
+- **Product Reviews and Ratings:** Allow registered users who have purchased an item to leave a review and a star rating, helping other customers make informed decisions.
+- **Advanced Inventory Management:** Implement a system to track stock levels for each product. This would prevent sales of out-of-stock items and could display "Low Stock" warnings to customers.
+- **Wishlist Functionality:** Enable registered users to save items to a personal wishlist for future purchase.
+- **Discount Codes and Promotions:** Add the ability for admins to create and manage discount codes or run site-wide sales events.
+- **Enhanced Search and Filtering:** Expand on the current search to include advanced filtering options, such as filtering by price range, rarity, or product type, and sorting by price, popularity, or new arrivals.
+- **User Account Deletion:** Provide a secure option for users to delete their own accounts and personal data from their profile page.
+- **Blog/News Section:** Create a section for articles about new product arrivals, store news, or Pokémon-related content to build a community and improve SEO.
+
+# Bugs, Issues and Solutions
+
+Throughout the development process, several challenges were encountered. Below is a summary of key issues and their resolutions:
+
+- **Issue:** Submitting forms, such as adding items to the cart or the checkout form, resulted in a `403 Forbidden (CSRF verification failed)` error.
+- **Cause:** Django's Cross-Site Request Forgery protection requires a CSRF token to be sent with every POST request. This token was missing from some AJAX requests.
+- **Solution:**
+    - For standard HTML forms, the `{% csrf_token %}` template tag was included.
+    - For AJAX POST requests, a JavaScript function was implemented to retrieve the CSRF token from the cookie and include it in the `X-CSRFToken` header of the request, satisfying Django's security requirements.
+
+
+- **Issue:** After deploying model changes, the application would crash with a `ProgrammingError: relation "..." does not exist`.
+- **Cause:** The database schema on Heroku was out of sync with the Django models because migrations had not been applied after being created locally.
+- **Solution:**
+    - The Heroku `Procfile` was updated to include a `release` process. The command `release: python manage.py migrate` ensures that database migrations are automatically applied every time a new version of the app is deployed, keeping the database schema consistent with the models.
+
 
 # Deployment and Local Development
 
