@@ -8,6 +8,37 @@ More information about my reasoning to avoid AllAuth can be found [Here.](/ACCOU
 
 View the Website [Here.](https://eeveeemporium-a0b363641244.herokuapp.com/)
 
+## Table of Contents
+- [UX Developments](#ux-developments)
+  - [Strategy](#strategy)
+  - [User Stories](#user-stories)
+  - [Scope](#scope)
+- [Structure](#structure)
+  - [Topology Diagrams](#topology-diagrams)
+  - [Database Schema & Structure](#database-schema--structure)
+- [Skeleton](#skeleton)
+  - [Wireframes](#wireframes)
+- [Features](#features)
+  - [Multipage Elements](#multipage-elements)
+- [CRUD Table](#crud-table)
+- [Testing](#testing)
+- [Defensive Programming](#defensive-programming)
+- [Error Handling](#error-handling)
+- [Technologies Used](#technologies-used)
+- [Future Implementations](#future-implementations)
+- [Bugs, Issues and Solutions](#bugs-issues-and-solutions)
+- [Deployment and Local Development](#deployment-and-local-development)
+  - [AWS S3 Set up](#aws-s3-set-up)
+  - [Deployment to Heroku](#deployment-to-heroku)
+  - [Cloning the Repo](#cloning-the-repo)
+  - [Forking the Repo](#forking-the-repo)
+  - [Create Virtual Environment](#create-virtual-environment)
+  - [Create and migrate Database](#create-and-migrate-database)
+- [Credits](#credits)
+  - [Content](#content)
+  - [Acknowledgements](#acknowledgements)
+
+
 ## UX Developments
 
 ### Strategy
