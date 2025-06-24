@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY =  os.environ.get("SECRET_KEY", 'django-insecure-0%h8gn3k^k+r=mzmgf=l%+mtfh#1g6*6li25vo(&bwj9pf%+w=')
 
-DEBUG_STATE = config('DEBUG', default=True, cast=bool)
+DEBUG_STATE = True #config('DEBUG', default=True, cast=bool)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = DEBUG_STATE
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'compressor',  # Add django-compressor for CSS/JS compression
     'storages',  # Add this for django-storages
     'store',  # Custom app for the store
     'cart',   # Custom app for the shopping cart
@@ -74,7 +75,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
-        'APP_DIRS': True,
+        'APP_DIRS': DEBUG,  # Only use APP_DIRS in development
         'OPTIONS': {
             'context_processors': [
                 # Custom context processor for categories
@@ -90,6 +91,15 @@ TEMPLATES = [
         },
     },
 ]
+
+# Template optimization - only set loaders if not in DEBUG mode
+if not DEBUG:
+    TEMPLATES[0]['OPTIONS']['loaders'] = [
+        ('django.template.loaders.cached.Loader', [
+            'django.template.loaders.filesystem.Loader',
+            'django.template.loaders.app_directories.Loader',
+        ]),
+    ]
 
 WSGI_APPLICATION = 'eeveeEmporium.wsgi.application'
 
@@ -219,16 +229,27 @@ STRIPE_PRIVATE_KEY = os.environ.get("STRIPE_SECRET_KEY")
 STRIPE_WH_SECRET = os.environ.get("STRIPE_WH_SECRET")
 
 # Cache configuration
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': config('REDIS_URL', default='redis://127.0.0.1:6379/1'),
-        'TIMEOUT': 300,  # 5 minutes default timeout
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+if DEBUG:
+    # Use dummy cache for development if Redis is not available
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'unique-snowflake',
+            'TIMEOUT': 300,
         }
     }
-}
+else:
+    # Use Redis for production
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': config('REDIS_URL', default='redis://127.0.0.1:6379/1'),
+            'TIMEOUT': 300,  # 5 minutes default timeout
+            'OPTIONS': {
+                'CONNECTION_POOL_KWARGS': {'max_connections': 50},
+            }
+        }
+    }
 
 # Cache time settings
 CACHE_MIDDLEWARE_ALIAS = 'default'
@@ -238,3 +259,43 @@ CACHE_MIDDLEWARE_KEY_PREFIX = 'eevee_emporium'
 # Session settings for performance
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_CACHE_ALIAS = 'default'
+
+# Django Compressor settings
+COMPRESS_ENABLED = not DEBUG
+COMPRESS_OFFLINE = True
+COMPRESS_CSS_FILTERS = [
+    'compressor.filters.css_default.CssAbsoluteFilter',
+    'compressor.filters.cssmin.CSSMinFilter',
+]
+COMPRESS_JS_FILTERS = [
+    'compressor.filters.jsmin.JSMinFilter',
+]
+
+# Static files optimization
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+]
+
+# Production optimizations
+if not DEBUG:
+    # Security settings
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    
+    # Performance settings
+    USE_ETAGS = True
+    
+    # Disable server tokens
+    SECURE_REFERRER_POLICY = 'same-origin'
+
+# File upload settings for better performance
+FILE_UPLOAD_MAX_MEMORY_SIZE = 2621440  # 2.5MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 2621440  # 2.5MB
