@@ -104,6 +104,109 @@ Based on the premise of creating a minimally viable product I have decided to fo
 
 Below are diagrams illustrating the pages that are accessible for users based on their session state (guest/logged in guest/admin), any page not listed in a diagram is designed not to be accessible by a user.
 
+User Topology:
+
+![Topology Diagram for users](/documentation/user-topology.png)
+
+Superuser Topology
+
+![Topology Diagram for superusers](/documentation/superuser-topology.jpg)
+
+## Database Schema & Structure
+
+The ecommerce site runs from a single database with multiple tables.
+
+Only users with admin privileges can modify or delete any data. All users can create and read data. The diagram below (ERD) shows the relationships between these tables.
+
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+
+# Skeleton
+
+## Wireframes
+
+- Homepage
+- About Page
+- Contact Page
+- Search Page
+
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+
+# Features
+
+A breakdown of the various elements and their implementation across the website.
+
+## Multipage Elements
+
+All Pages
+
+- CSS and JavaScript files related to Styling
+
+Navbar
+
+- Logo
+- Navigational Links
+
+Footer
+
+- Contact Information
+
+# CRUD Table
+
+Below is a table of CRUD functionality for each relevant page:
+
+| Page               | C                  | R                                           | U                               | D                 |
+| ------------------ | ------------------ | ------------------------------------------- | ------------------------------- | ----------------- |
+| Home               |                    | Fetch latest Products, categories and sets  |                                 |                   |
+| Sets               |                    | Fetch Sets and related products             |                                 |                   |
+| Categories         |                    | Fetch Categories and related Products       |                                 |                   |
+| Admin - Sets       | Create Set         | Fetch Sets                                  | Edit Sets                       | Delete Sets       |
+| Admin - Categories | Create Category    | Fetch Categories                            | Edit Categories                 | Delete Categories |
+| Admin - Products   | Create Product     | Fetch Products                              | Edit Products                   | Delete Products   |
+| Admin - Reviews    |                    | Read Reviews                                | Change Review Publicity         | Delete Reviews    |
+| Login              |                    | Check password hash                         |                                 |                   |
+| Register           | User profile       |                                             |                                 |                   |
+| Search             |                    | Fetch Search Results                        |                                 |                   |
+
 # Deployment and Local Development
 
 ## AWS S3 Set up
