@@ -102,98 +102,96 @@ Based on the premise of creating a minimally viable product I have decided to fo
 
 Below are diagrams illustrating the pages that are accessible for users based on their session state (guest/logged in guest/admin), any page not listed in a diagram is designed not to be accessible by a user.
 
+# Deployment and Local Development
 
+## Deployment to Heroku
 
+The project is deployed to Heroku from this repository, therefore the deployed version of the site is always up to date with this repository and the deployed code is the exact code as in this repository.
 
+In order to clone this project follow the steps below (May vary depending on your development environment):
 
+- Create a local Clone of this repository from GitHub
+- Run `pip install -r requirements.txt`
+- Log in to Heroku and create a new app and name it as required
+- Choose your closest region for deployment
+- Still in Heroku, navigate to deploy and select GithHub, then select your cloned repository and click "connect".
+- Navigate to the Settings tab and set up your environment variables using the [env.py.example](env.py.example) for reference
+- Then return to the Deploy section of the App in Heroku and enable automatic deploys.
+- Click on the "Deploy Branch" option.
+- It will take a few minutes to deploy, then you can click on "Open App" once it is complete.
 
+## Cloning the Repo
 
+In order to fork the repo, follow these steps:
 
+- Locate the repository
+- Click the button labelled "Code" to the top right of the screen
+- Click HTTPS and copy the link provided
+- In your local environment navigate to the desired directory
+- Open a terminal and type "git clone repository-url"
+- Press enter to begin the cloning process
 
+## Forking the Repo
 
+- Locate the repository on GitHub
+- Click Fork in the top right corner
+- If necassary, select the owner for the forked code under the Owner dropdown menu.
+- Optionally, edit the Repository Name field to rename your forked repository
+- Optionally, use the Description field to input a description of your fork
+- Select "Copy the DEFAULT branch only"
+  - This is another optional step, many scenarios only require a fork of the default branch. If you do not select this you will copy all branches into your fork
+- Click Create Fork
 
+## Create Virtual Environment
 
+To create a virtual environment for the project open gitbash or CLI of your choice within the project directory. To do this follow the instructions below:
 
-
-
-
-
-
-
-
-
-install virtual environment:
+- Open the CLI in the project directory
+- install virtual environment:
 ```python -m venv virt```
 
-Run Virtual Environment:
-```./virt/Scripts/activate```
+Then to run the virtual environment type:
 
-Install requirements:
-```pip install -r requirements.txt```
+- ```./virt/Scripts/activate```
+
+Following this it is wise to install the dependencies:
+
+- ```pip install -r requirements.txt```
 
 Create superuser:
-```python manage.py createsuperuser```
+- ```python manage.py createsuperuser```
 
 Follow prompts to add username, email and password.
 
 Launch development server:
-```python manage.py reunserver```
+- ```python manage.py reunserver```
 
+This process varies depending on your local development environment and operating system. If the above doesn't work you may need to search for instructions specific to your development environment. Please ensure you have Python installed.
 
-Template:
-https://themewagon.com/themes/kaira/
+## Create and migrate Database
 
-Favicon:
-https://commons.wikimedia.org/wiki/File:Pok%C3%A9_Ball_icon.svg
+Before launching the project you will also need to run the database migrations:
 
-Favicon Generator
-https://realfavicongenerator.net/
+This assumed you have updated the local project ENV values based on the example provided.
 
-Wallpaper:
-https://wall.alphacoders.com/big.php?i=613932
+- within the vvirtual environment run: ```python manage.py migrate```
 
-image optimiser:
-https://squoosh.app
+# Credits
 
-## Using Default Account Functionality over AllAuth
+## Content
 
-I opted not to use AllAuth in this project as Django comes with a robust and secure built-in authentication system (django.contrib.auth) that provides the fundamental building blocks for user management. For a project that requires standard user registration, login, logout, password reset, and profile updates, Django's default capabilities are often more than enough.
+Various pokemon related Imagery was sourced from [Pokemon](https://www.pokemon.com/us)
 
-1 - Core User Model: Django provides a User model out of the box, which includes essential fields like username, password (hashed for security), email, first name, last name, is_active, is_staff, and is_superuser. This covers the basic identity and administrative roles.
+For the design of the website I modified a publicly available Bootstrap Template: [Kaira](https://themewagon.com/themes/kaira/)
 
-2 - Authentication Views and URLs: Django includes pre-built views and URL patterns for common authentication actions:
+The Favicon was sourced from [Wikimedia](https://commons.wikimedia.org/wiki/File:Pok%C3%A9_Ball_icon.svg)
 
-- login/
-- logout/
-- password_change/
-- password_change/done/
-- password_reset/
-- password_reset/done/
-- reset/<uidb64>/<token>/
-- reset/done/
+I then generated the appropriate icons using [Favicon Generator](https://realfavicongenerator.net/)
 
-By simply including django.contrib.auth.urls in our urls.py and creating custom templates for these views, we can get a fully functional authentication system with minimal effort.
+I aslo used this image available from [Alphacoders](https://wall.alphacoders.com/big.php?i=613932)
 
-3 - Extending the User Model (User Profile): For any additional user-specific information (e.g., a bio, profile picture, phone number), Django strongly recommends creating a separate "profile" model that has a OneToOneField relationship with the User model. This keeps authentication concerns separate from user data and allows for flexible extension without modifying Django's core User model directly. We can then easily create and update this profile information when users register or update their details. Signals (like post_save) can be used to automatically create a UserProfile whenever a new User is created.
+For image optimisation and conversions between file types I used [Squoosh](https://squoosh.app)
 
-4 - Forms for Registration and Updates: Django's UserCreationForm and UserChangeForm are excellent starting points for handling user registration and updates. These forms are based on the User model and can be easily customized or extended to include fields from our custom UserProfile model. This allows us to build our registration and profile update forms with Django's powerful form handling.
+## Acknowledgements
 
-5 - Security: Django's built-in authentication system is designed with security in mind, handling password hashing, session management, and common vulnerabilities. By sticking to the default, we benefit from the continuous security improvements and best practices maintained by the Django community.
-
-6 - Simplicity and Control: For projects with straightforward authentication requirements, using Django's defaults offers greater control and a simpler setup. We avoid introducing an external dependency, reducing potential complexity and the learning curve associated with a new library. We have direct control over the templates, views, and forms, allowing for precise customization.
-
-## Why AllAuth is Unnecessary (for this project)
-
-Django AllAuth is a fantastic and comprehensive package that offers a wide array of features, particularly for more complex authentication needs. However, for our project, these advanced features are currently not required, making AllAuth an unnecessary addition:
-
-- Social Authentication (Google, Facebook, etc.): AllAuth excels at integrating with various social login providers. If our project required users to sign up or log in via Google, Facebook, Twitter, etc., AllAuth would be a strong contender. However, our current scope only requires traditional username/email and password authentication.
-    
-- Email Verification Workflows: While Django's default system can be extended for email verification, AllAuth provides robust, ready-to-use email verification workflows (mandatory, optional, none). Our current needs for email verification are basic and can be handled with simpler custom logic.
-    
-- Account Management Beyond Basic Updates: AllAuth includes more advanced account management features like linking/unlinking multiple email addresses, managing social account connections, etc. These features are not part of our initial requirements.
-    
-- Pre-built Templates and Views (Opinionated): AllAuth provides a set of pre-built templates and views that can accelerate development. However, these are often more opinionated in their structure and styling, and customizing them to fit a unique design can sometimes be more involved than building custom templates from scratch with Django's default views.
-    
-- Increased Dependency: Every third-party library adds a dependency to the project, which can introduce overhead in terms of maintenance, updates, and potential conflicts. By using Django's default, we keep our dependency footprint smaller.
-
-In summary, for our Django project's user authentication and profile functionality, the built-in features of Django are perfectly capable and provide a secure, flexible, and maintainable solution without the added complexity of a larger third-party library like Django AllAuth. We can achieve all our requirements by extending and customizing Django's powerful default authentication system.
+Thanks again to my Mentor, Brian Macharia, for provided continuous feedback on my ideas and progress as well as the teams at Code Institute and East Kent College for their ongoing support.
