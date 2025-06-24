@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Uh Oh! That page doesn't exist - 404 | UK Based{% endblock %}
+{% block description %}Discover the best Pokémon cards and collectibles at Eevee Emporium. Shop now for rare finds and exclusive deals.{% endblock %}
+{% block keywords %}Pokémon cards, collectibles, Eevee Emporium, rare cards, trading cards, Pokémon shop{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12 text-center mb-4">
+            <h1>404 - Page Not Found</h1>
+            <p>Sorry, the page you are looking for does not exist.</p>
+            <a href="{% url 'home' %}" class="btn btn-primary">Go to Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
