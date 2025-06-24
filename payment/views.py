@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from store.models import Product
 import stripe
 from django.conf import settings
-
+from django.core.mail import send_mail
 
 # Set up Stripe
 stripe.public_api_key = settings.STRIPE_PUBLIC_KEY
@@ -77,6 +77,17 @@ def process_order(request):
                 prod_to_update = Product.objects.get(id=product['id'])
                 prod_to_update.stock -= product['quantity']
                 prod_to_update.save()
+
+                send_mail(
+                    'Order Confirmation - Eevee Emporium',
+                    f"Hi {my_shipping.get('shipping_full_name')},\n\n"
+                    f"Thank you for your order!\n\n"
+                    f"Your order total was £{total_price}.\n\n"
+                    "We will notify you again once your order has shipped.",
+                    'noreply@eevee-emporium.com',
+                    [my_shipping.get('shipping_email')],
+                    fail_silently=False,
+                )
 
             messages.success(
                 request,

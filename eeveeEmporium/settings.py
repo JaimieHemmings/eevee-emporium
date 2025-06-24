@@ -9,8 +9,29 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY =  os.environ.get("SECRET_KEY", 'django-insecure-0%h8gn3k^k+r=mzmgf=l%+mtfh#1g6*6li25vo(&bwj9pf%+w=')
 
+DEBUG_STATE = config('DEBUG', default=True, cast=bool)
+
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = DEBUG_STATE
+
+
+
+# Email settings
+if DEBUG_STATE == "False":
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = os.environ.get('MAILGUN_SMTP_SERVER', 'smtp.mailgun.org')
+    EMAIL_PORT = int(os.environ.get('MAILGUN_SMTP_PORT', 587))
+    EMAIL_HOST_USER = os.environ.get('MAILGUN_SMTP_LOGIN')
+    EMAIL_HOST_PASSWORD = os.environ.get('MAILGUN_SMTP_PASSWORD')
+    EMAIL_USE_TLS = True
+
+    # Default "from" email address
+    DEFAULT_FROM_EMAIL = 'Eevee Emporium <noreply@eeveeemporium.com>'
+    SERVER_EMAIL = DEFAULT_FROM_EMAIL
+else:
+    # Use console backend for development
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
