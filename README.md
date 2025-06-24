@@ -252,6 +252,8 @@ Throughout the development process, several challenges were encountered. Below i
 
 # Deployment and Local Development
 
+*Note*: My deployment has ```DEBUG = FALSE``` to prevent any security issues on the live deployed site. Best practice is to ensure your deployed version has the same setting in the Environment Configs.
+
 ## AWS S3 Set up
 
 Please refer to the [AWS Setup](/AWS_SETUP.md) instructions.

@@ -83,4 +83,19 @@ urlpatterns = [
         views.confirm_delete_set,
         name='confirm_delete_set'
     ),
+    path(
+        'manage_reviews/',
+        views.manage_reviews,
+        name='control_panel_manage_reviews'
+    ),
+    path(
+        'toggle_review_status/<int:review_id>/',
+        views.toggle_review_status,
+        name='control_panel_toggle_review_status'
+    ),
+    path(
+        'confirm_delete_review/<int:review_id>/',
+        views.confirm_delete_review,
+        name='confirm_delete_review'
+    )
 ]

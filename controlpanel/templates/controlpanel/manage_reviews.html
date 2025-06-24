@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Control Panel - Manage Sets{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <a href="{% url 'control_panel_home' %}" class="btn btn-primary mb-3">Back to Dashboard</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Manage Reviews</h1>
+            <p>Manage all user reviews. Featured reviews will be dsiplayed on the homepage.</p>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">User</th>
+                    <th scope="col">Review</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in reviews %}
+                <tr>
+                    <td>
+                        <p class="mb-0">{{ item.name }}</p>
+                        <p class="mb-0">{{ item.email }}</p>
+                    </td>
+                    <td>{{ item.review }}</td>
+                    <td>
+                        <a
+                        href="{% url 'control_panel_toggle_review_status' item.id %}" class="btn btn-sm btn-primary">
+                            {% if item.featured %}
+                            Unfeature
+                            {% else %}
+                            Feature
+                            {% endif %}
+                        </a>
+                        
+                        <a href="{% url 'confirm_delete_review' item.id %}" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No products available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -4,6 +4,18 @@
     </div>
     <div class="swiper testimonial-swiper overflow-hidden my-5">
       <div class="swiper-wrapper d-flex">
+        {% if featuredReviews %}
+        {% for item in featuredReviews %}
+        <div class="swiper-slide">
+          <div class="testimonial-item text-center">
+            <blockquote>
+              <p class="text-base">“{{ item.review }}”</p>
+              <div class="review-title text-uppercase">{{ item.name }}</div>
+            </blockquote>
+          </div>
+        </div>
+        {% endfor %}
+        {% else %}
         <div class="swiper-slide">
           <div class="testimonial-item text-center">
             <blockquote>
@@ -36,6 +48,7 @@
             </blockquote>
           </div>
         </div>
+        {% endif %}
       </div>
     </div>
     <div class="testimonial-swiper-pagination d-flex justify-content-center mb-5"></div>

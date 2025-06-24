@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import user_passes_test
 from store.models import Product, Category, Set
 from payment.models import Order, OrderItem
 from store.forms import ProductForm, CategoryForm, SetForm
+from contact.models import Review
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -16,12 +17,14 @@ def control_panel_home(request):
     total_sets = Set.objects.count()
     total_orders = Order.objects.count()
     latest_orders = Order.objects.order_by('-date_ordered')[:5]
+    total_reviews = Review.objects.count()
     return render(request, 'controlpanel/control_panel_home.html', {
         'total_products': total_products,
         'total_categories': total_categories,
         'total_sets': total_sets,
         'total_orders': total_orders,
-        'latest_orders': latest_orders
+        'latest_orders': latest_orders,
+        'total_reviews': total_reviews,
     })
 
 
@@ -310,4 +313,61 @@ def confirm_delete_set(request, set_id):
 
     return render(request, 'controlpanel/confirm_delete_set.html', {
         'set': set_instance,
+    })
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def manage_reviews(request):
+    """
+    Render the manage reviews page in the control panel.
+    """
+    reviews = Review.objects.all().order_by('-created_at')
+    return render(request, 'controlpanel/manage_reviews.html', {
+        'reviews': reviews,
+    })
+
+@user_passes_test(lambda u: u.is_superuser)
+def manage_reviews(request):
+    """
+    Render the manage reviews page in the control panel.
+    """
+    reviews = Review.objects.all().order_by('-id')
+    return render(request, 'controlpanel/manage_reviews.html', {
+        'reviews': reviews,
+    })
+
+@user_passes_test(lambda u: u.is_superuser)
+def toggle_review_status(request, review_id):
+    """
+    Toggle the featured status of a review in the control panel.
+    """
+    try:
+        review = Review.objects.get(id=review_id)
+        review.featured = not review.featured
+        review.save()
+        messages.success(request, "Review status updated successfully.")
+    except Review.DoesNotExist:
+        messages.error(request, "Review not found.")
+
+    return redirect('control_panel_manage_reviews')
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def confirm_delete_review(request, review_id):
+    """
+    Confirm deletion of a review in the control panel.
+    """
+    try:
+        review = Review.objects.get(id=review_id)
+    except Review.DoesNotExist:
+        messages.error(request, "Review not found.")
+        return redirect('control_panel_manage_reviews')
+
+    if request.method == 'POST':
+        review.delete()
+        messages.success(request, "Review deleted successfully.")
+        return redirect('control_panel_manage_reviews')
+
+    return render(request, 'controlpanel/confirm_delete_review.html', {
+        'review': review,
     })

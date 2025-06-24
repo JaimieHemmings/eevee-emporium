@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact Us | Eevee Emporium{% endblock %}
+{% block description %}Have questions or need assistance? Contact Eevee Emporium for support with your Pokémon card needs. We're here to help!{% endblock %}
+{% block keywords %}contact, support, Eevee Emporium, Pokémon cards, customer service{% endblock %}
+
+{% block content %}
+<section class="contact-section position-relative overflow-hidden bg-image w-100 bg-image-fill py-10 bg-eevee-cartoon">
+  <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50 -z-1"></div>
+  <div class="container-fluid px-0 mb-5 position-relative">
+    <div class="text-center text-white">
+      <h1 class="display-4 fw-bold">Contact Us</h1>
+      <p class="lead">We're here to help with all your Pokémon card needs!</p>
+    </div>
+  </div>
+</section>
+<section class="container mb-5 py-5">
+  <div class="row g-0">
+    <div class="col-lg-6 p-1 p-md-5 d-flex flex-column">
+      <h2 class="mb-4">Get in Touch</h2>
+      <p>If you have any questions, concerns, or just want to chat about Pokémon cards, feel free to reach out to us. We're always happy to hear from fellow trainers!</p>
+      <p>Email: <a href="mailto:info@eeveeemporium.com" class="text-decoration-none">
+        info@eeveeemporium.com</a></p>
+      <p>Phone: <a href="tel:+441234567890" class="text-decoration-none">
+        +44 123 456 7890</a></p>
+      <p>Address: 123 Eevee Lane, Pokémon City, UK</p>
+    </div>
+    <div class="col-lg-6 p-0">
+      <h2 class="mb-4">Add A Review</h2>
+      <form method="post" action="{% url 'contact' %}">
+        {% csrf_token %}
+        {{ review_form.as_p }}
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>
+</section>        
+{% endblock %}

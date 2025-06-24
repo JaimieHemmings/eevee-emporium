@@ -9,6 +9,7 @@ from django import forms
 from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
 import json
 from cart.cart import Cart
+from contact.models import Review
 
 
 # Function to handle product details view
@@ -84,11 +85,14 @@ def home(request):
     categories = Category.objects.all()
     # Fetch the latest 5 sets
     featuredSets = Set.objects.all()[:3]
+    # Fetch the latest 5 featured reviews
+    featuredReviews = Review.objects.filter(featured=True).order_by('-id')[:5]
     # Render the home.html template
     return render(request, 'home.html', {
         'products': products,
         'categories': categories,
-        'featuredSets': featuredSets
+        'featuredSets': featuredSets,
+        'featuredReviews': featuredReviews
     })
 
 

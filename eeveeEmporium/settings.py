@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY =  os.environ.get("SECRET_KEY", 'django-insecure-0%h8gn3k^k+r=mzmgf=l%+mtfh#1g6*6li25vo(&bwj9pf%+w=')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'cart',   # Custom app for the shopping cart
     'payment',  # Custom app for payment processing
     'controlpanel',  # Custom app for the admin control panel
+    'contact',  # Custom app for contact forms
 ]
 
 MIDDLEWARE = [
