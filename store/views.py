@@ -13,14 +13,15 @@ from cart.cart import Cart
 
 # Function to handle product details view
 def product(request, slug):
-    product = Product.objects.get(slug=slug)  # Fetch the product by name
-    if not product:
+    try:
+        product = Product.objects.get(slug=slug)  # Fetch the product by name
+        # Render the product.html template with the product data
+        return render(request, 'product.html', {'product': product})
+    except Product.DoesNotExist:
         # Show an error message if the product does not exist
         messages.error(request, 'Product not found.')
         # Redirect to home if the product is not found
         return redirect('home')
-    # Render the product.html template with the product data
-    return render(request, 'product.html', {'product': product})
 
 
 # Function to handle category view
@@ -105,8 +106,8 @@ def login_user(request):
             # Log the user in
             login(request, user)
             # Update session cart from database
-            current_user = Profile.objects.get(
-                user__id=request.user.id
+            current_user, created = Profile.objects.get_or_create(
+                user=request.user
             )
             saved_cart = current_user.old_cart
             if saved_cart:
@@ -234,10 +235,11 @@ def update_password(request):
 
 def update_info(request):
     if request.user.is_authenticated:
-        profile = Profile.objects.get(user__id=request.user.id)
+        # Use get_or_create to handle users without a profile yet.
+        profile, created = Profile.objects.get_or_create(user=request.user)
         # Use get_or_create to handle users without a shipping address yet.
         shipping_address, _ = (
-            ShippingAddress.objects.get_or_create(user__id=request.user.id)
+            ShippingAddress.objects.get_or_create(user=request.user)
         )
 
         if request.method == 'POST':
