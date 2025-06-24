@@ -12,6 +12,14 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 
+# Helper to check authentication
+def require_login(request):
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to register or log in to continue.")
+        return redirect('register')
+    return None
+
+
 # Set up Stripe
 stripe.public_api_key = settings.STRIPE_PUBLIC_KEY
 stripe.api_key = settings.STRIPE_PRIVATE_KEY
@@ -21,6 +29,10 @@ def process_order(request):
     """
     Process the order and handle payment.
     """
+    auth_redirect = require_login(request)
+    if auth_redirect:
+        return auth_redirect
+
     if request.POST:
         cart = Cart(request)
         cart_products = cart.get_prods()
@@ -138,6 +150,10 @@ def payment_success(request):
     """
     Render the payment success page.
     """
+    auth_redirect = require_login(request)
+    if auth_redirect:
+        return auth_redirect
+
     return render(request, 'payment/payment_success.html')
 
 
@@ -145,6 +161,10 @@ def checkout(request):
     """
     Render the checkout page.
     """
+    auth_redirect = require_login(request)
+    if auth_redirect:
+        return auth_redirect
+
     cart = Cart(request)
     cart_products = cart.get_prods()
     total_price = cart.total()
@@ -184,6 +204,10 @@ def billing_info(request):
     """
     Render the billing information page.
     """
+    auth_redirect = require_login(request)
+    if auth_redirect:
+        return auth_redirect
+
     if request.method == 'POST':
         cart = Cart(request)
         cart_products = cart.get_prods()
