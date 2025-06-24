@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'compressor',  # Add django-compressor for CSS/JS compression
     'storages',  # Add this for django-storages
     'store',  # Custom app for the store
     'cart',   # Custom app for the shopping cart
@@ -56,6 +55,10 @@ INSTALLED_APPS = [
     'controlpanel',  # Custom app for the admin control panel
     'contact',  # Custom app for contact forms
 ]
+
+# Add compressor only if not in DEBUG mode to avoid development issues
+if not DEBUG:
+    INSTALLED_APPS.append('compressor')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -75,7 +78,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
-        'APP_DIRS': DEBUG,  # Only use APP_DIRS in development
+        'APP_DIRS': True,  # Always True - loaders handle optimization
         'OPTIONS': {
             'context_processors': [
                 # Custom context processor for categories
@@ -94,6 +97,7 @@ TEMPLATES = [
 
 # Template optimization - only set loaders if not in DEBUG mode
 if not DEBUG:
+    TEMPLATES[0]['APP_DIRS'] = False  # Disable APP_DIRS when using loaders
     TEMPLATES[0]['OPTIONS']['loaders'] = [
         ('django.template.loaders.cached.Loader', [
             'django.template.loaders.filesystem.Loader',
@@ -230,7 +234,7 @@ STRIPE_WH_SECRET = os.environ.get("STRIPE_WH_SECRET")
 
 # Cache configuration
 if DEBUG:
-    # Use dummy cache for development if Redis is not available
+    # Use local memory cache for development
     CACHES = {
         'default': {
             'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
@@ -238,45 +242,64 @@ if DEBUG:
             'TIMEOUT': 300,
         }
     }
+    # Don't use cache for sessions in development
+    SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 else:
-    # Use Redis for production
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-            'LOCATION': config('REDIS_URL', default='redis://127.0.0.1:6379/1'),
-            'TIMEOUT': 300,  # 5 minutes default timeout
-            'OPTIONS': {
-                'CONNECTION_POOL_KWARGS': {'max_connections': 50},
+    # Use Redis for production if available, fallback to database
+    redis_url = config('REDIS_URL', default=None)
+    if redis_url:
+        CACHES = {
+            'default': {
+                'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+                'LOCATION': redis_url,
+                'TIMEOUT': 300,
+                'OPTIONS': {
+                    'CONNECTION_POOL_KWARGS': {'max_connections': 50},
+                }
             }
         }
-    }
+        # Use cache for sessions in production
+        SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+        SESSION_CACHE_ALIAS = 'default'
+    else:
+        # Fallback to database cache
+        CACHES = {
+            'default': {
+                'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+                'LOCATION': 'cache_table',
+            }
+        }
+        SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 # Cache time settings
 CACHE_MIDDLEWARE_ALIAS = 'default'
 CACHE_MIDDLEWARE_SECONDS = 300  # Cache pages for 5 minutes
 CACHE_MIDDLEWARE_KEY_PREFIX = 'eevee_emporium'
 
-# Session settings for performance
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
-SESSION_CACHE_ALIAS = 'default'
-
-# Django Compressor settings
-COMPRESS_ENABLED = not DEBUG
-COMPRESS_OFFLINE = True
-COMPRESS_CSS_FILTERS = [
-    'compressor.filters.css_default.CssAbsoluteFilter',
-    'compressor.filters.cssmin.CSSMinFilter',
-]
-COMPRESS_JS_FILTERS = [
-    'compressor.filters.jsmin.JSMinFilter',
-]
-
-# Static files optimization
-STATICFILES_FINDERS = [
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'compressor.finders.CompressorFinder',
-]
+# Django Compressor settings (only if compressor is installed)
+if 'compressor' in INSTALLED_APPS:
+    COMPRESS_ENABLED = not DEBUG
+    COMPRESS_OFFLINE = True
+    COMPRESS_CSS_FILTERS = [
+        'compressor.filters.css_default.CssAbsoluteFilter',
+        'compressor.filters.cssmin.CSSMinFilter',
+    ]
+    COMPRESS_JS_FILTERS = [
+        'compressor.filters.jsmin.JSMinFilter',
+    ]
+    
+    # Static files optimization
+    STATICFILES_FINDERS = [
+        'django.contrib.staticfiles.finders.FileSystemFinder',
+        'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+        'compressor.finders.CompressorFinder',
+    ]
+else:
+    # Default static files finders
+    STATICFILES_FINDERS = [
+        'django.contrib.staticfiles.finders.FileSystemFinder',
+        'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    ]
 
 # Production optimizations
 if not DEBUG:
