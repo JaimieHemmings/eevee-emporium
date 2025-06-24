@@ -9,11 +9,12 @@ from store.models import Product
 import stripe
 from django.conf import settings
 from django.core.mail import send_mail
+from django.template.loader import render_to_string
+
 
 # Set up Stripe
 stripe.public_api_key = settings.STRIPE_PUBLIC_KEY
 stripe.api_key = settings.STRIPE_PRIVATE_KEY
-
 
 
 def process_order(request):
@@ -60,6 +61,8 @@ def process_order(request):
 
             create_order = Order.objects.create(**order_data)
 
+            order_items = []
+
             # Create Order Items
             for product in cart_products:
                 order_item_data = {
@@ -71,31 +74,37 @@ def process_order(request):
                 if request.user.is_authenticated:
                     order_item_data['user'] = request.user
 
-                OrderItem.objects.create(**order_item_data)
+                order_item = OrderItem.objects.create(**order_item_data)
+                order_items.append(order_item)
 
                 # Reduce product stock
                 prod_to_update = Product.objects.get(id=product['id'])
                 prod_to_update.stock -= product['quantity']
                 prod_to_update.save()
-                try:
-                    send_mail(
-                        'Order Confirmation - Eevee Emporium',
-                        f"Hi {my_shipping.get('shipping_full_name')},\n\n"
-                        f"Thank you for your order!\n\n"
-                        f"Your order total was £{total_price}.\n\n"
-                        "We will notify you again once your order has shipped.",
-                        'noreply@eevee-emporium.com',
-                        [my_shipping.get('shipping_email')],
-                        fail_silently=False,
-                    )
-                except Exception as e:
-                    messages.error(
-                        request,
-                        "An error occurred while sending the confirmation email."
-                        f" Error: {str(e)}"
-                        " Please contact support."
-                    )
-                    return redirect('billing_info')
+
+            # Now send the email ONCE, after all items are created
+            body = render_to_string('order_confirmation_email.txt', {
+                'full_name': my_shipping.get('shipping_full_name'),
+                'order_id': create_order.id,
+                'items': order_items,
+                'total_price': total_price,
+            })
+            try:
+                send_mail(
+                    f"Order {create_order.id} Confirmation - Eevee Emporium",
+                    body,
+                    'noreply@eevee-emporium.com',
+                    [my_shipping.get('shipping_email')],
+                    fail_silently=False,
+                )
+            except Exception as e:
+                messages.error(
+                    request,
+                    "An error occurred while sending the confirmation email."
+                    f" Error: {str(e)}"
+                    " Please contact support."
+                )
+                return redirect('billing_info')
 
             messages.success(
                 request,
