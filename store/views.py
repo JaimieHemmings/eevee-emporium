@@ -10,31 +10,49 @@ from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
 import json
 from cart.cart import Cart
 from contact.models import Review
+from django.core.cache import cache
+from django.views.decorators.cache import cache_page
+from django.db.models import Prefetch
 
 
 # Function to handle product details view
 def product(request, slug):
-    try:
-        product = Product.objects.get(slug=slug)  # Fetch the product by name
-        # Render the product.html template with the product data
-        return render(request, 'product.html', {'product': product})
-    except Product.DoesNotExist:
-        # Show an error message if the product does not exist
-        messages.error(request, 'Product not found.')
-        # Redirect to home if the product is not found
-        return redirect('home')
+    # Try to get from cache first
+    cache_key = f'product_{slug}'
+    product = cache.get(cache_key)
+    
+    if not product:
+        try:
+            product = Product.objects.select_related('category', 'set').get(slug=slug)
+            # Cache for 15 minutes
+            cache.set(cache_key, product, 900)
+        except Product.DoesNotExist:
+            messages.error(request, 'Product not found.')
+            return redirect('home')
+    
+    return render(request, 'product.html', {'product': product})
 
 
 # Function to handle category view
 def category(request, slug):
     try:
-        # Attempt to fetch the category by slug
-        searchCategory = Category.objects.get(slug=slug)
-        # Fetch products belonging to the category
-        products = Product.objects.filter(category=searchCategory)
-        # Fetch the first 5 products for the featured section
-        featuredProducts = Product.objects.filter(category=searchCategory)[:5]
-        # Render the category.html template with the category and products data
+        # Cache category data
+        cache_key = f'category_{slug}'
+        cached_data = cache.get(cache_key)
+        
+        if cached_data:
+            searchCategory, products, featuredProducts = cached_data
+        else:
+            # Optimize with select_related and prefetch_related
+            searchCategory = Category.objects.get(slug=slug)
+            products = Product.objects.select_related('category', 'set').filter(
+                category=searchCategory
+            ).order_by('-created_at')
+            featuredProducts = products[:5]
+            
+            # Cache for 10 minutes
+            cache.set(cache_key, (searchCategory, products, featuredProducts), 600)
+        
         return render(
             request,
             'category.html',
@@ -45,9 +63,8 @@ def category(request, slug):
             }
         )
     except Exception as e:
-        # Show an error message if the category does not exist
         messages.error(request, f'Category does not exist - {e}')
-        # Redirect to home if the category does not exist
+        return redirect('home')
         return redirect('home')
 
 

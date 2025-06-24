@@ -41,9 +41,9 @@ class Category(models.Model):
     """
     Category model to classify products.
     """
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, db_index=True)
     slug = models.SlugField(
-        max_length=100, unique=True, blank=True, null=True, editable=False
+        max_length=100, unique=True, blank=True, null=True, editable=False, db_index=True
     )
 
     def save(self, *args, **kwargs):
@@ -67,9 +67,9 @@ class Category(models.Model):
 
 # Sets of products
 class Set(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, db_index=True)
     slug = models.SlugField(
-        max_length=100, unique=True, blank=True, null=True, editable=False
+        max_length=100, unique=True, blank=True, null=True, editable=False, db_index=True
     )
     image = models.ImageField(upload_to='uploads/sets/', blank=True, null=True)
 
@@ -105,21 +105,29 @@ class Customer(models.Model):
 
 # Products available in the store
 class Product(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, db_index=True)
     description = models.TextField(blank=True, null=True)
-    price = models.DecimalField(default=0, max_digits=6, decimal_places=2)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
+    price = models.DecimalField(default=0, max_digits=6, decimal_places=2, db_index=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1, db_index=True)
     set = models.ForeignKey(
-        Set, on_delete=models.CASCADE, null=True, blank=True, default=None
+        Set, on_delete=models.CASCADE, null=True, blank=True, default=None, db_index=True
     )
-    stock = models.PositiveIntegerField(default=0)
+    stock = models.PositiveIntegerField(default=0, db_index=True)
     image = models.ImageField(
         upload_to='uploads/product/', blank=True, null=True
     )
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     slug = models.SlugField(
-        max_length=100, unique=True, blank=True, null=True, editable=False
+        max_length=100, unique=True, blank=True, null=True, editable=False, db_index=True
     )
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['category', 'created_at']),
+            models.Index(fields=['set', 'created_at']),
+            models.Index(fields=['price', 'stock']),
+        ]
+        ordering = ['-created_at']
 
     # Save the slug based on the product name, ensuring uniqueness
     # If the name changes, update the slug accordingly

@@ -58,8 +58,10 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',  # Add cache middleware
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',  # Add cache middleware
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -97,6 +99,32 @@ WSGI_APPLICATION = 'eeveeEmporium.wsgi.application'
 DATABASES = {
     'default': dj_database_url.parse(config('DATABASE_URL'))
 }
+
+# Database performance optimizations
+if not DEBUG:
+    DATABASES['default']['CONN_MAX_AGE'] = 60  # Connection pooling
+    DATABASES['default']['OPTIONS'] = {
+        'MAX_CONNS': 20,
+        'CONN_HEALTH_CHECKS': True,
+    }
+
+# Logging for database queries (only in DEBUG mode)
+if DEBUG:
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'console': {
+                'class': 'logging.StreamHandler',
+            },
+        },
+        'loggers': {
+            'django.db.backends': {
+                'handlers': ['console'],
+                'level': 'DEBUG',
+            },
+        },
+    }
 
 
 # Password validation
@@ -189,3 +217,24 @@ CSRF_TRUSTED_ORIGINS = [
 STRIPE_PUBLIC_KEY = os.environ.get("STRIPE_PUBLIC_KEY")
 STRIPE_PRIVATE_KEY = os.environ.get("STRIPE_SECRET_KEY")
 STRIPE_WH_SECRET = os.environ.get("STRIPE_WH_SECRET")
+
+# Cache configuration
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': config('REDIS_URL', default='redis://127.0.0.1:6379/1'),
+        'TIMEOUT': 300,  # 5 minutes default timeout
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
+# Cache time settings
+CACHE_MIDDLEWARE_ALIAS = 'default'
+CACHE_MIDDLEWARE_SECONDS = 300  # Cache pages for 5 minutes
+CACHE_MIDDLEWARE_KEY_PREFIX = 'eevee_emporium'
+
+# Session settings for performance
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_CACHE_ALIAS = 'default'
