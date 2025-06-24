@@ -17,7 +17,7 @@ DEBUG = DEBUG_STATE
 
 
 # Email settings
-if DEBUG_STATE == "False":
+if DEBUG_STATE != True:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = os.environ.get('MAILGUN_SMTP_SERVER', 'smtp.mailgun.org')
