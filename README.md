@@ -12,21 +12,21 @@ View the Website [Here.](https://eeveeemporium-a0b363641244.herokuapp.com/)
 
 #### Project Goals
 
-    Develop a full-stack e-commerce website with full CRUD functionality.
-    Guests can browse products, view details, and add items to the cart.
-    Users can create an account, log in, and manage their personal profile and order history.
-    Registered users can complete a secure checkout process to purchase items.
-    Admins have full CRUD functionality for products, categories, and can manage all user orders.
-    The website will be fully responsive, providing a seamless experience on all device sizes.
-    Implement robust error handling and user feedback to ensure a smooth user journey.
-    Ensure a clear and intuitive user interface for easy navigation and product discovery.
+- Develop a full-stack e-commerce website with full CRUD functionality.
+- Guests can browse products, view details, and add items to the cart.
+- Users can create an account, log in, and manage their personal profile and order history.
+- Registered users can complete a secure checkout process to purchase items.
+- Admins have full CRUD functionality for products, categories, and can manage all user orders.
+- The website will be fully responsive, providing a seamless experience on all device sizes.
+- Implement robust error handling and user feedback to ensure a smooth user journey.
+- Ensure a clear and intuitive user interface for easy navigation and product discovery.
 
 #### User Demographic
 
-    Pokémon fans and collectors of all ages.
-    Individuals looking to purchase Pokémon trading cards, merchandise, and accessories.
-    Gift shoppers looking for Pokémon-related items.
-    Potential employers evaluating full-stack development skills.
+- Pokémon fans and collectors of all ages.
+- Individuals looking to purchase Pokémon trading cards, merchandise, and accessories.
+- Gift shoppers looking for Pokémon-related items.
+- Potential employers evaluating full-stack development skills.
 
 ### User Stories
 
@@ -34,32 +34,32 @@ View the Website [Here.](https://eeveeemporium-a0b363641244.herokuapp.com/)
 
 As a first-time visitor, I want to be able to:
 
-    Immediately understand the site is an e-commerce store for Pokémon products.
-    Easily navigate the site and browse through different product categories.
-    Search for specific products.
-    View detailed information and images for each product.
-    Add products to my shopping bag.
-    Easily register for a new account.
+- Immediately understand the site is an e-commerce store for Pokémon products.
+- Easily navigate the site and browse through different product categories.
+- Search for specific products.
+- View detailed information and images for each product.
+- Add products to my shopping bag.
+- Easily register for a new account.
 
 #### Registered User Goals
 
 As a registered user, I want to be able to:
 
-    Securely log in and out of my account.
-    View and update my personal information and shipping details.
-    View my past order history.
-    Proceed through a secure and simple checkout process to buy items in my bag.
-    Receive an order confirmation after purchase.
+- Securely log in and out of my account.
+- View and update my personal information and shipping details.
+- View my past order history.
+- Proceed through a secure and simple checkout process to buy items in my bag.
+- Receive an order confirmation after purchase.
 
 #### Site Admin Goals
 
 As a site admin, I want to be able to:
 
-    Add new products to the store, including details like name, description, price, and image.
-    Edit existing product information.
-    Delete products from the store.
-    View and manage all customer orders.
-    Manage product categories to organize the storefront.
+- Add new products to the store, including details like name, description, price, and image.
+- Edit existing product information.
+- Delete products from the store.
+- View and manage all customer orders.
+- Manage product categories to organize the storefront.
 
 ### Scope
 
