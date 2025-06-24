@@ -1,4 +1,14 @@
 {% load static %}
+
+<!-- Preload critical images (first 3 products) -->
+{% if products %}
+  {% for product in products %}
+    {% if forloop.counter <= 3 %}
+      <link rel="preload" as="image" href="{{ product.image.url }}" fetchpriority="high">
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
 <section id="billboard" class="bg-light relative bg-image-fill position-relative eevee-bg">
 <div class="position-absolute top-0 start-0 w-100 h-100 -z-1 bg-light opacity-90"></div>
     <div class="container">
@@ -25,10 +35,17 @@
                   <button type="button" class="btn btn-primary">
                     {{ product.category }}
                   </button>
-                </a>
+                </a>                
                 <div class="image-holder mt-3">
                   <a href="{% url 'product' product.slug %}" class="ratio ratio-1x1 d-block">
-                    <img src="{{ product.image.url }}" alt="Image for {{ product.name }}" class="object-fit-cover">
+                    <img src="{{ product.image.url }}" 
+                         alt="Image for {{ product.name }}" 
+                         class="object-fit-cover"
+                         loading="{% if forloop.counter <= 3 %}eager{% else %}lazy{% endif %}"
+                         decoding="async"
+                         fetchpriority="{% if forloop.counter <= 3 %}high{% else %}auto{% endif %}"
+                         width="300"
+                         height="300">
                   </a>
                 </div>
                 <div class="banner-content py-4">
