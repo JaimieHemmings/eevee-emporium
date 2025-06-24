@@ -9,9 +9,11 @@ from store.models import Product
 import stripe
 from django.conf import settings
 
+
 # Set up Stripe
-stripe_public_key = settings.STRIPE_SECRET_KEY
-strie_secret_key = settings.STRIPE_SECRET_KEY
+stripe.public_api_key = settings.STRIPE_PUBLIC_KEY
+stripe.private_api_key = settings.STRIPE_PRIVATE_KEY
+
 
 
 def process_order(request):
@@ -169,7 +171,7 @@ def billing_info(request):
             "total_price": total_price,
             "shipping_info": request.POST,
             "billing_form": billing_form,
-            "stripe_publishable_key": stripe_public_key
+            "stripe_publishable_key": stripe.public_api_key
         }
         return render(request, 'payment/billing_info.html', context)
 

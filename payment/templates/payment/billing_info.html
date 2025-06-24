@@ -87,7 +87,7 @@
 <script src="https://js.stripe.com/v3/"></script>
 <script>
     // Create a Stripe client.
-    var stripe = Stripe('pk_test_51RdRw8Pubo0ff1TK6xS11BdSgd9H3UB5QF7oQVq06X0O7HjfozKmeMpd1IGPG55fafmzdM7qx29dlf8U00HDVw0Z00eVydwSuD');
+    var stripe = Stripe('{{ stripe_publishable_key|safe }}');
 
     // Create an instance of Elements.
     var elements = stripe.elements();
