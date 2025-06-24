@@ -32,8 +32,8 @@ Discover the best Pokémon cards and collectibles at Eevee Emporium. Search for 
     {% for product in products %}
         <div class="banner-item col-md-4">
             <div class="image-holder">
-                <a href="{% url 'product' product.slug %}">
-                <img src="{{ product.image.url }}" alt="Representative image for {{ product.name }}" class="img-fluid">
+                <a href="{% url 'product' product.slug %}" class="ratio ratio-1x1 d-block">
+                <img src="{{ product.image.url }}" alt="Representative image for {{ product.name }}" class="object-fit-cover">
                 </a>
             </div>
             <div class="banner-content py-4">
@@ -45,7 +45,6 @@ Discover the best Pokémon cards and collectibles at Eevee Emporium. Search for 
                 <h5 class="element-title text-uppercase mt-3">
                 <a href="index.html" class="item-anchor">{{ product.name }}</a>
                 </h5>
-                <p class="text-black">{{ product.description }}</p>
                 <div class="btn-left">
                 <a href="{% url 'product' product.slug %}" class="btn-link fs-6 text-uppercase item-anchor text-decoration-none">View Product</a>
                 </div>
