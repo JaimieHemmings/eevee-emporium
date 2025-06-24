@@ -77,17 +77,25 @@ def process_order(request):
                 prod_to_update = Product.objects.get(id=product['id'])
                 prod_to_update.stock -= product['quantity']
                 prod_to_update.save()
-
-                send_mail(
-                    'Order Confirmation - Eevee Emporium',
-                    f"Hi {my_shipping.get('shipping_full_name')},\n\n"
-                    f"Thank you for your order!\n\n"
-                    f"Your order total was £{total_price}.\n\n"
-                    "We will notify you again once your order has shipped.",
-                    'noreply@eevee-emporium.com',
-                    [my_shipping.get('shipping_email')],
-                    fail_silently=False,
-                )
+                try:
+                    send_mail(
+                        'Order Confirmation - Eevee Emporium',
+                        f"Hi {my_shipping.get('shipping_full_name')},\n\n"
+                        f"Thank you for your order!\n\n"
+                        f"Your order total was £{total_price}.\n\n"
+                        "We will notify you again once your order has shipped.",
+                        'noreply@eevee-emporium.com',
+                        [my_shipping.get('shipping_email')],
+                        fail_silently=False,
+                    )
+                except Exception as e:
+                    messages.error(
+                        request,
+                        "An error occurred while sending the confirmation email."
+                        f" Error: {str(e)}"
+                        " Please contact support."
+                    )
+                    return redirect('billing_info')
 
             messages.success(
                 request,
