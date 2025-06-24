@@ -86,7 +86,7 @@ def home(request):
     # Fetch the latest 5 sets
     featuredSets = Set.objects.all()[:3]
     # Fetch the latest 5 featured reviews
-    featuredReviews = Review.objects.filter(featured=True).order_by('-id')[:5]
+    featuredReviews = Review.objects.filter(featured=True).order_by('-id')[:4]
     # Render the home.html template
     return render(request, 'home.html', {
         'products': products,

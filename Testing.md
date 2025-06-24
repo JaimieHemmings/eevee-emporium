@@ -67,3 +67,42 @@ Testing was conducted across multiple modern web browsers (Google Chrome, Mozill
 | ADMIN-04| Delete Product      | As an admin, delete a product from the management interface.                  | The product is removed from the database and no longer appears on the storefront. | Pass   |
 | ADMIN-05| Category Management | As an admin, add, edit, and delete product categories.                        | All CRUD operations for categories work as expected, and changes are reflected in the site's navigation and product filtering. | Pass   |
 | ADMIN-06| Order Management    | As an admin, view the list of all customer orders.                            | A comprehensive list of all orders is displayed in the admin panel.
+
+// ...existing code...
+| ADMIN-06| Order Management    | As an admin, view the list of all customer orders.                            | A comprehensive list of all orders is displayed in the admin panel.
+---
+
+## Automated Testing (Unit & Integration Tests)
+
+This section details the automated tests written for the `store` application using Django's built-in testing framework. These tests are located in the `store/tests.py` file and are designed to verify the correctness of the application's backend logic, particularly the views.
+
+### Test File: `store/tests.py`
+
+The `store/tests.py` file contains a test suite that automates the verification of the view functions in `store/views.py`. It uses the `django.test.TestCase` class, which provides a client to simulate HTTP requests (GET and POST) and assert responses, ensuring that each view behaves as expected under various conditions.
+
+### Test Suite: `StoreViewsTestCase`
+
+This test class includes the following key components:
+
+*   **`setUp()` Method**: Before each test is run, this method sets up a consistent test environment. It creates mock database objects, including a test user, a product, a category, and a set. This ensures that tests are run against a predictable dataset and are independent of each other.
+
+*   **View Tests**: Each method within the class tests a specific view or a piece of its functionality:
+    *   **`test_home_view` & `test_about_view`**: Ensure the static pages load correctly (HTTP 200 OK) and use the correct templates.
+    *   **`test_product_view_success` & `test_product_view_not_found`**: Verify that the product detail page loads for an existing product and correctly handles non-existent products by redirecting.
+    *   **`test_category_view_success` & `test_set_view_success`**: Check that category and set pages correctly filter and display products.
+    *   **`test_register_user_view`**: Simulates a user registration POST request and confirms that a new user is created in the database.
+    *   **`test_login_logout_user_view`**: Tests the full authentication cycle by logging a user in, checking for an authenticated session, and then logging them out.
+    *   **`test_update_user_view_authenticated`**: Ensures that a logged-in user can successfully update their profile information.
+    *   **`test_update_password_view`**: Verifies that a logged-in user can change their password.
+    *   **`test_update_info_view`**: Checks that a user can update their shipping and profile information.
+    *   **`test_search_view`**: Tests the search functionality by submitting a query and asserting that the correct results are returned.
+
+### How to Run Automated Tests
+
+To execute the entire test suite for the `store` application, run the following command from the project's root directory:
+
+```sh
+python manage.py test store
+```
+
+This command discovers and runs all tests within the `store` app, providing a detailed report of the results. Passing these tests provides a high degree of confidence that the core functionalities of the store
