@@ -1,6 +1,5 @@
 {% load static %}
 
-<!-- Preload critical images (first 3 products) -->
 {% if products %}
   {% for product in products %}
     {% if forloop.counter <= 3 %}
@@ -31,7 +30,7 @@
             {% for product in products %}
             <div class="swiper-slide bg-light rounded-3 p-3">
               <div class="btn-left">
-                <div class="billboard-cat-title text-white">
+                <div class="billboard-cat-title text-white p-1 d-inline-block">
                   <a href="/category/{{ product.category.slug }}" class="text-decoration-none">
                       {{ product.category }}
                     </a>                

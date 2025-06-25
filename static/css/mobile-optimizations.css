@@ -1,0 +1,90 @@
+/* Mobile-first optimizations */
+:root {
+  --animation-duration: 0.3s;
+}
+
+/* Reduce complex animations on mobile */
+@media (max-width: 768px) {
+  .txt-fx,
+  .image-zoom-effect,
+  .border-animation {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  .image-zoom-effect:hover .image-holder,
+  .image-zoom-effect:hover img {
+    transform: none !important;
+  }
+  
+  /* Simplify hover effects on touch devices */
+  .link-effect:hover a>span,
+  .link-effect:hover a::after {
+    transform: none !important;
+  }
+  
+  /* Reduce motion for better performance */
+  .swiper-slide {
+    transition-duration: 0.2s !important;
+  }
+  
+  /* Hide decorative elements on mobile */
+  .title-xlarge {
+    display: none;
+  }
+  
+  /* Optimize typography for mobile */
+  h1, .h1 { font-size: 2.5rem; }
+  h2, .h2 { font-size: 2.2rem; }
+  h3, .h3 { font-size: 1.8rem; }
+  
+  /* Reduce padding for mobile */
+  .py-5 { padding-top: 2rem !important; padding-bottom: 2rem !important; }
+  .collection-content { padding: 2rem !important; }
+}
+
+/* Optimize for very small screens */
+@media (max-width: 480px) {
+  .collection-content { padding: 1.5rem !important; }
+  .element-title { font-size: 1.5rem; }
+  
+  /* Further reduce animations */
+  * {
+    animation-duration: 0.1s !important;
+    transition-duration: 0.1s !important;
+  }
+}
+
+/* Disable animations for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Optimize for high-DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Use optimized images for retina displays */
+  .image-holder img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Will-change optimization for animated elements */
+.swiper-slide,
+.product-item,
+.image-zoom-effect {
+  will-change: transform;
+}
+
+.loaded .swiper-slide,
+.loaded .product-item,
+.loaded .image-zoom-effect {
+  will-change: auto;
+}

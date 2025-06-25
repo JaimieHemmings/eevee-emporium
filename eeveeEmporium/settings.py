@@ -15,7 +15,7 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 DEBUG_STATE = config('DEBUG', default=True, cast=bool)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = DEBUG_STATE
 
 # Email settings
 if DEBUG_STATE != True:

@@ -10,18 +10,36 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="format-detection" content="telephone=no">
+  
+  <!-- Resource hints for performance -->
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="dns-prefetch" href="//fonts.googleapis.com">
+  <link rel="dns-prefetch" href="//fonts.gstatic.com">
+  
   {% include 'favicons.html' %}
 
+  <!-- Inline Critical CSS for above-the-fold content -->
+  <style>
+    body{font-family:"Nunito",Roboto,sans-serif;font-size:18px;line-height:1.5;color:#8f8f8f;margin:0;padding:0}.navbar{background-color:#f8f9fa!important;padding:.75rem 1rem;border-bottom:1px solid #dee2e6}.navbar-brand{color:#111!important;font-weight:600;text-decoration:none}.container,.container-fluid{width:100%;max-width:1800px;margin:0 auto;padding:0 15px}.position-relative{position:relative}.w-100{width:100%}.h-100{height:100%}.d-flex{display:flex}.align-items-center{align-items:center}.justify-content-between{justify-content:space-between}.text-uppercase{text-transform:uppercase}.btn{display:inline-block;padding:.375rem .75rem;margin-bottom:0;font-size:1rem;font-weight:400;line-height:1.5;text-align:center;text-decoration:none;vertical-align:middle;cursor:pointer;border:1px solid transparent;border-radius:0;transition:color .15s ease-in-out,background-color .15s ease-in-out}.btn-dark{color:#fff;background-color:#212529;border-color:#212529}.btn-dark:hover{color:#fff;background-color:#1c1f23;border-color:#1a1e21}.collection{padding:3rem 0}.collection-item{margin:2.5rem 0}.collection-content{padding:3rem}.element-title{margin-bottom:1rem}
+  </style>
+
   {% block base_css %}
+  <!-- Preload critical fonts -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"></noscript>
+  
+  <!-- Critical CSS - inline or preload -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="{% static 'css/vendor.css' %}">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"></noscript>
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/mobile-optimizations.css' %}" media="screen and (max-width: 768px)">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   {% endblock %}
   {% block extra_css %}
   {% endblock %}
@@ -37,14 +55,18 @@
   {% include 'footer.html' %}
 
   {% block base_js %}
+  <!-- Critical JS -->
   <script src="{% static 'js/jquery.min.js' %}"></script>
-  <script src="{% static 'js/plugins.js' %}"></script>
-  <script src="{% static 'js/SmoothScroll.js' %}"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
     crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-  <script src="{% static 'js/script.min.js' %}"></script>
+  
+  <!-- Defer non-critical JS -->
+  <script src="{% static 'js/plugins.js' %}" defer></script>
+  <script src="{% static 'js/SmoothScroll.js' %}" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js" defer></script>
+  <script src="{% static 'js/script.min.js' %}" defer></script>
+  <script src="{% static 'js/performance.js' %}" defer></script>
   {% endblock %}
   
   {% block extra_js %}
