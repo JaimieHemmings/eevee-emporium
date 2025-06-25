@@ -4,6 +4,37 @@ This document outlines the manual testing performed on the Eevee Emporium websit
 
 ---
 
+## Manual vs. Automatic Testing Overview
+
+### Manual Testing
+**Manual testing** involves human testers manually executing test cases without the use of automation tools. Testers interact with the application as real users would, clicking buttons, filling forms, and navigating through the interface to verify functionality.
+
+**Advantages:**
+- **User Experience Focus**: Can evaluate usability, design, and overall user experience
+- **Exploratory Testing**: Can discover unexpected issues through creative testing scenarios
+- **Visual Validation**: Can verify layouts, styling, and visual elements across different devices
+- **Real-world Scenarios**: Tests how actual users interact with the application
+
+**Best for:** UI/UX testing, cross-browser compatibility, accessibility, and exploratory testing
+
+### Automatic Testing
+**Automatic testing** uses code and testing frameworks to execute pre-written test scripts that verify specific functionality without human intervention. Tests run quickly and can be repeated consistently.
+
+**Advantages:**
+- **Speed & Efficiency**: Can run hundreds of tests in minutes
+- **Consistency**: Same test conditions every time, eliminating human error
+- **Regression Testing**: Quickly verify that new changes don't break existing functionality
+- **CI/CD Integration**: Can run automatically on code changes
+
+**Best for:** Backend logic, API testing, database operations, and regression testing
+
+### Combined Approach
+This project uses **both approaches** for comprehensive coverage:
+- **Manual testing** ensures the user interface works well across devices and browsers
+- **Automatic testing** verifies backend functionality and prevents regressions
+
+---
+
 ## Testing Strategy
 
 Testing was conducted across multiple modern web browsers (Google Chrome, Mozilla Firefox, Microsoft Edge) and on various device sizes (desktop, tablet, and mobile) to ensure cross-browser compatibility and a fully responsive design. The tests cover all key user stories and functionalities, from a guest visitor's perspective to a registered user and a site administrator.
@@ -66,9 +97,6 @@ Testing was conducted across multiple modern web browsers (Google Chrome, Mozill
 | ADMIN-03| Edit Product        | As an admin, select a product to edit and update its details (e.g., price, description). | The product's details are successfully updated on the storefront.            | Pass   |
 | ADMIN-04| Delete Product      | As an admin, delete a product from the management interface.                  | The product is removed from the database and no longer appears on the storefront. | Pass   |
 | ADMIN-05| Category Management | As an admin, add, edit, and delete product categories.                        | All CRUD operations for categories work as expected, and changes are reflected in the site's navigation and product filtering. | Pass   |
-| ADMIN-06| Order Management    | As an admin, view the list of all customer orders.                            | A comprehensive list of all orders is displayed in the admin panel.
-
-// ...existing code...
 | ADMIN-06| Order Management    | As an admin, view the list of all customer orders.                            | A comprehensive list of all orders is displayed in the admin panel.
 ---
 
