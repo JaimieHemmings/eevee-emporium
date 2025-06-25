@@ -172,3 +172,119 @@ Error 1 states:
 However I have opted to keep this as it provides notable performance improvements and caused no issues in testing.
 
 The other errors are relating to the use of a duplicate ID which was a short sighted implementation for the seperate mobile and desktop navigation menus but will need to be fixed in a future sprint.
+
+## Stripe Testing
+
+The Stripe implementation uses Stripe's test environment (Sandbox) to allow comprehensive testing of payment functionality without processing real transactions. This ensures that all payment flows work correctly before going live with actual payments.
+
+### Test Environment Setup
+
+The application is configured to use Stripe's test API keys, which enable:
+- Safe testing with fake card numbers
+- Simulation of various payment scenarios (success, failure, authentication required)
+- Webhook testing for payment confirmations
+- No real money transactions
+
+### Test Card Numbers
+
+Stripe provides various test card numbers to simulate different payment scenarios:
+
+#### **Successful Payments**
+- **Visa**: `4242 4242 4242 4242`
+- **Visa (debit)**: `4000 0566 5566 5556`
+- **Mastercard**: `5555 5555 5555 4444`
+- **American Express**: `3782 822463 10005`
+- **Discover**: `6011 1111 1111 1117`
+
+#### **Payment Failures**
+- **Generic decline**: `4000 0000 0000 0002`
+- **Insufficient funds**: `4000 0000 0000 9995`
+- **Lost card**: `4000 0000 0000 9987`
+- **Stolen card**: `4000 0000 0000 9979`
+- **Expired card**: `4000 0000 0000 0069`
+- **Incorrect CVC**: `4000 0000 0000 0127`
+- **Processing error**: `4000 0000 0000 0119`
+
+#### **Authentication Required (3D Secure)**
+- **Authentication succeeds**: `4000 0027 6000 3184`
+- **Authentication fails**: `4000 0082 6000 3178`
+
+### Test Payment Details
+
+For all test cards, use the following details:
+- **Expiration Date**: Any future date (e.g., `02/32`)
+- **CVC**: Any 3-digit number (e.g., `111`)
+- **ZIP Code**: Any valid ZIP code (e.g., `12345`)
+- **Name**: Any name
+
+### Payment Testing Scenarios
+
+#### **Scenario 1: Successful Payment Flow**
+1. Add items to cart
+2. Proceed to checkout
+3. Fill in delivery information
+4. Use test card: `4242 4242 4242 4242`
+5. Enter valid test details
+6. Submit payment
+7. **Expected Result**: Payment succeeds, order confirmation displayed, confirmation email sent
+
+#### **Scenario 2: Payment Decline**
+1. Follow steps 1-3 from Scenario 1
+2. Use declined card: `4000 0000 0000 0002`
+3. Submit payment
+4. **Expected Result**: Payment fails with appropriate error message, user remains on checkout page
+
+#### **Scenario 3: 3D Secure Authentication**
+1. Follow steps 1-3 from Scenario 1
+2. Use authentication card: `4000 0027 6000 3184`
+3. Submit payment
+4. Complete 3D Secure challenge when prompted
+5. **Expected Result**: Payment succeeds after authentication, order confirmed
+
+#### **Scenario 4: Form Validation**
+1. Attempt checkout with invalid card details
+2. Try incomplete form submission
+3. **Expected Result**: Client-side validation prevents submission, error messages displayed
+
+### Webhook Testing
+
+### Security Features Tested
+
+- **HTTPS**: All payment data transmitted securely
+- **Tokenization**: Card details never stored on server
+- **CSRF Protection**: Forms protected against cross-site attacks
+- **Input Sanitization**: All user inputs validated and sanitized
+
+### Error Handling
+
+The payment system handles various error scenarios:
+- Network timeouts
+- Invalid card details
+- Declined payments
+- Authentication failures
+- Server errors
+
+Each error type displays appropriate user-friendly messages while logging technical details for debugging.
+
+### Testing Checklist
+
+In order to comprehensively ensure secure payment processing I implemented the following checklist:
+
+- [ ] Successful payment processing with various card types
+- [ ] Payment decline handling
+- [ ] 3D Secure authentication flow
+- [ ] Form validation (client and server-side)
+- [ ] Order confirmation and email sending
+- [ ] Error message display
+- [ ] Cart persistence on payment failure
+- [ ] Mobile payment experience
+- [ ] Page loading and responsiveness during payment processing
+
+### Production Considerations
+
+When moving to production:
+1. Replace test API keys with live Stripe keys
+3. Test with small real transactions
+4. Monitor payment success rates
+5. Set up proper error logging and alerting
+

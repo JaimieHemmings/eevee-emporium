@@ -274,6 +274,7 @@ The root of the templates folder includes several fallback templates for errors 
 - Languages:
     - HTML
     - CSS3
+      - Bootstrap 5
     - JavaScript
         - JQuery
     - Python
@@ -283,6 +284,7 @@ The root of the templates folder includes several fallback templates for errors 
 - Git
 - BootStrap 5
 - Heroku
+- Stripe
 
 # Future Implementations
 
