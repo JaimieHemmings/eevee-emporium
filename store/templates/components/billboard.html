@@ -32,7 +32,7 @@
             <div class="swiper-slide bg-light rounded-3 p-3">
               <div class="banner-item">
                 <a href="/category/{{ product.category.slug }}" class="text-decoration-none">
-                  <button type="button" class="btn btn-primary">
+                  <button type="button" class="btn btn-primary-danger">
                     {{ product.category }}
                   </button>
                 </a>                
@@ -50,7 +50,7 @@
                 </div>
                 <div class="banner-content py-4">
                   <h2 class="element-title text-uppercase mt-3 billboard-title">
-                    <a href="index.html" class="item-anchor">{{ product.name }}</a>
+                    <a href="{% url 'product' product.slug %}" class="item-anchor">{{ product.name }}</a>
                   </h2>
                   <div class="btn-left">
                     <a href="{% url 'product' product.slug %}" class="btn btn-dark text-uppercase mt-3">View Product</a>
