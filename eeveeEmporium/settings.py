@@ -7,12 +7,15 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY =  os.environ.get("SECRET_KEY", 'django-insecure-0%h8gn3k^k+r=mzmgf=l%+mtfh#1g6*6li25vo(&bwj9pf%+w=')
+SECRET_KEY = os.environ.get("SECRET_KEY", 'django-insecure-0%h8gn3k^k+r=mzmgf=l%+mtfh#1g6*6li25vo(&bwj9pf%+w=')
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = config('DEBUG', default=True, cast=bool)
 
 DEBUG_STATE = config('DEBUG', default=True, cast=bool)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = DEBUG_STATE
+DEBUG = True
 
 # Email settings
 if DEBUG_STATE != True:
@@ -48,12 +51,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'storages',  # Add this for django-storages
+    'storages',
     'store',  # Custom app for the store
     'cart',   # Custom app for the shopping cart
     'payment',  # Custom app for payment processing
     'controlpanel',  # Custom app for the admin control panel
     'contact',  # Custom app for contact forms
+    'django_extensions',
 ]
 
 # Add compressor only if not in DEBUG mode to avoid development issues
@@ -62,10 +66,10 @@ if not DEBUG:
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.middleware.cache.UpdateCacheMiddleware',  # Add cache middleware
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',  # Add cache middleware
+    'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -297,22 +301,33 @@ else:
 
 # Production optimizations
 if not DEBUG:
-    # Security settings
+    # Security settings (non-SSL)
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
-    SECURE_HSTS_SECONDS = 31536000
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
+    SECURE_REFERRER_POLICY = 'same-origin'
     
     # Performance settings
     USE_ETAGS = True
     
-    # Disable server tokens
-    SECURE_REFERRER_POLICY = 'same-origin'
+    # SSL settings - only apply in actual production (Heroku/deployment)
+    # Check if we're running on Heroku or other production environment
+    IS_HEROKU = 'DYNO' in os.environ
+    if IS_HEROKU or config('FORCE_SSL', default=False, cast=bool):
+        SECURE_SSL_REDIRECT = True
+        SECURE_HSTS_SECONDS = 31536000
+        SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+        SECURE_HSTS_PRELOAD = True
+        SESSION_COOKIE_SECURE = True
+        CSRF_COOKIE_SECURE = True
 
 # File upload settings for better performance
 FILE_UPLOAD_MAX_MEMORY_SIZE = 2621440  # 2.5MB
 DATA_UPLOAD_MAX_MEMORY_SIZE = 2621440  # 2.5MB
+
+# Django Extensions settings (for development)
+if DEBUG:
+    # Add django-extensions settings for graph_models
+    GRAPH_MODELS = {
+        'all_applications': True,
+        'group_models': True,
+    }

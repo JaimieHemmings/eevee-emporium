@@ -145,9 +145,73 @@ Superuser Topology
 
 ## Database Schema & Structure
 
-The ecommerce site runs from a single database with multiple tables.
+The Eevee Emporium e-commerce platform is built on a PostgreSQL database with a well-structured relational schema designed to handle all aspects of an online store. The database architecture follows Django's best practices and ensures data integrity through proper relationships and constraints.
 
-Only users with admin privileges can modify or delete any data. All users can create and read data. The diagram below (ERD) shows the relationships between these tables.
+### Core Architecture
+
+The database is organized around **five main applications**, each managing specific functionality:
+
+#### 1. **User Management & Authentication**
+- **Django User Model**: Built-in authentication system handling login/logout
+- **Profile Model**: Extends User with additional fields (phone, address, cart history)
+- **ShippingAddress Model**: Stores user shipping information for checkout
+
+#### 2. **Product Catalog Structure**
+- **Category Model**: Organizes products into logical groups (e.g., "Trading Cards", "Accessories")
+- **Set Model**: Groups products by Pokémon card sets or merchandise collections
+- **Product Model**: Core inventory with pricing, descriptions, stock levels, and images
+
+#### 3. **Order & Payment System**
+- **Order Model**: Records completed purchases with shipping details and payment amounts
+- **OrderItem Model**: Individual line items within orders (product, quantity, price)
+- **Customer Model**: Legacy customer data structure
+
+#### 4. **Shopping Experience**
+- **Cart System**: Session-based shopping cart (no database model - stored in sessions)
+- **Review Model**: Customer reviews and testimonials with admin moderation
+
+### Key Relationships
+
+**Product Hierarchy:**
+```
+Category (1) ──→ (Many) Products
+Set (1) ──→ (Many) Products
+```
+
+**User & Orders:**
+```
+User (1) ──→ (Many) Orders
+User (1) ──→ (1) Profile
+User (1) ──→ (1) ShippingAddress
+```
+
+**Order Details:**
+```
+Order (1) ──→ (Many) OrderItems
+OrderItem (Many) ──→ (1) Product
+```
+
+### Performance Optimizations
+
+The database includes strategic indexing for optimal query performance:
+- **Database indexes** on frequently searched fields (name, price, stock, created_at)
+- **Composite indexes** for complex queries (category+date, set+date, price+stock)
+- **Slug fields** with unique constraints for SEO-friendly URLs
+- **Automatic slug generation** from product/category names
+
+### Data Integrity Features
+
+- **Foreign Key Constraints**: Ensure referential integrity between related tables
+- **Cascade Deletions**: Properly handle related data when items are deleted
+- **Automatic Timestamps**: Track creation and modification dates
+- **Signal Handlers**: Automatically create user profiles and shipping addresses
+- **Validation**: Built-in Django field validation and custom business logic
+
+The schema supports the full e-commerce workflow from product browsing to order completion while maintaining data consistency and optimal performance for both customers and administrators.
+
+![Database Diagram](/documentation/myapp_models.png)
+
+
 
 # Skeleton
 
@@ -334,6 +398,35 @@ Following this it is wise to install the dependencies:
 
 - ```pip install -r requirements.txt```
 
+## Development Server Setup
+
+### HTTP vs HTTPS Configuration
+
+The project is configured to automatically handle SSL/HTTPS settings based on the deployment environment:
+
+- **Development**: Runs on HTTP (http://127.0.0.1:8000) with SSL redirects disabled
+- **Production (Heroku)**: Automatically enables HTTPS redirects and secure cookies
+- **Other Production**: Use `FORCE_SSL=True` in your .env file to enable HTTPS redirects
+
+If you encounter SSL/HTTPS redirect issues in development:
+
+1. Ensure your `.env` file has `DEBUG=True` (or remove the .env file to use defaults)
+2. Don't set `FORCE_SSL=True` unless you're running HTTPS locally
+3. The development server should be accessed via `http://` not `https://`
+
+### Environment Configuration
+
+Copy `example.env` to `.env` and customize the values for your local setup:
+
+```bash
+cp example.env .env
+```
+
+Key settings for development:
+- `DEBUG=True` - Enables debug mode and disables SSL redirects
+- `DATABASE_URL=sqlite:///db.sqlite3` - Uses local SQLite database
+- `FORCE_SSL=False` - Keeps HTTP in development
+
 Create superuser:
 - ```python manage.py createsuperuser```
 
@@ -350,7 +443,7 @@ Before launching the project you will also need to run the database migrations:
 
 This assumed you have updated the local project ENV values based on the example provided.
 
-- within the vvirtual environment run: ```python manage.py migrate```
+- within the virtual environment run: ```python manage.py migrate```
 
 # Credits
 
@@ -367,6 +460,8 @@ I then generated the appropriate icons using [Favicon Generator](https://realfav
 I aslo used this image available from [Alphacoders](https://wall.alphacoders.com/big.php?i=613932)
 
 For image optimisation and conversions between file types I used [Squoosh](https://squoosh.app)
+
+For generating the wireframes I used [Octopus](https://www.octopus.do)
 
 ## Acknowledgements
 

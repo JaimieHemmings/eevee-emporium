@@ -258,10 +258,12 @@ def update_info(request):
     if request.user.is_authenticated:
         # Use get_or_create to handle users without a profile yet.
         profile, created = Profile.objects.get_or_create(user=request.user)
-        # Use get_or_create to handle users without a shipping address yet.
-        shipping_address, _ = (
-            ShippingAddress.objects.get_or_create(user=request.user)
+        # Get the most recent shipping address or create one if none exists
+        shipping_address = (
+            ShippingAddress.objects.filter(user=request.user).order_by('-updated_at').first()
         )
+        if not shipping_address:
+            shipping_address = ShippingAddress.objects.create(user=request.user)
 
         if request.method == 'POST':
             user_info_form = UserInfoForm(request.POST, instance=profile)

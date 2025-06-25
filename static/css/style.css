@@ -1697,3 +1697,13 @@ p {
 .product-button a {
   color: #111;
 }
+
+.billboard-title {
+  font-size: 1.4rem;
+}
+
+@media (min-width: 968px) {
+  .billboard-title {
+    font-size: 1.8rem;
+  }
+}

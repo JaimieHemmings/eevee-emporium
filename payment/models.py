@@ -82,32 +82,101 @@ class ShippingAddress(models.Model):
         null=True,
         blank=True
     )
-    shipping_full_name = models.CharField(max_length=255)
-    shipping_email = models.EmailField(max_length=255)
-    shipping_address1 = models.CharField(max_length=255)
-    shipping_address2 = models.CharField(max_length=255, null=True, blank=True)
-    shipping_city = models.CharField(max_length=100)
-    shipping_county = models.CharField(max_length=100)
-    shipping_postcode = models.CharField(max_length=20)
+    shipping_full_name = models.CharField(
+        max_length=100,
+        help_text="Full name for delivery"
+    )
+    shipping_email = models.EmailField(
+        max_length=254,
+        help_text="Email for delivery notifications"
+    )
+    shipping_address1 = models.CharField(
+        max_length=255,
+        verbose_name="Address Line 1",
+        help_text="Street address, P.O. box, or company name"
+    )
+    shipping_address2 = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        verbose_name="Address Line 2",
+        help_text="Apartment, suite, unit, building, floor, etc. (optional)"
+    )
+    shipping_city = models.CharField(
+        max_length=50,
+        help_text="City or town"
+    )
+    shipping_county = models.CharField(
+        max_length=50,
+        verbose_name="County/State",
+        help_text="County, state, or region"
+    )
+    shipping_postcode = models.CharField(
+        max_length=12,
+        verbose_name="Postal Code",
+        help_text="Postal code or ZIP code"
+    )
     shipping_country = models.CharField(
         max_length=100,
+        blank=False,
+        null=False,
+        default='United Kingdom',
+        verbose_name="Country",
+        help_text="Country name"
+    )
+    phone_number = models.CharField(
+        max_length=20,
         blank=True,
         null=True,
-        default='United Kingdom'
+        verbose_name="Phone Number",
+        help_text="Contact number for delivery (optional)"
     )
+    delivery_instructions = models.TextField(
+        max_length=500,
+        blank=True,
+        null=True,
+        verbose_name="Delivery Instructions",
+        help_text="Special delivery instructions (optional, max 500 characters)"
+    )
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     class Meta:
-        verbose_name_plural = "Shipping Address"
+        verbose_name_plural = "Shipping Addresses"
+        ordering = ['-updated_at']
+        indexes = [
+            models.Index(fields=['user', 'updated_at']),
+        ]
 
     def __str__(self):
-        return f"Shipping Address - {str(self.id)}"
+        return f"{self.shipping_full_name} - {self.shipping_city}, {self.get_country_display()}"
+    
+    def get_country_display(self):
+        """Return the country name (already stored as full name)"""
+        return self.shipping_country
+    
+    def get_full_address(self):
+        """Return the complete formatted address"""
+        address_parts = [
+            self.shipping_address1,
+            self.shipping_address2,
+            self.shipping_city,
+            self.shipping_county,
+            self.shipping_postcode,
+            self.get_country_display()
+        ]
+        # Filter out empty parts
+        return ', '.join(part for part in address_parts if part)
     
 
 @receiver(post_save, sender=User)
 def create_shipping_address(sender, instance, created, **kwargs):
     """
     Signal to create a ShippingAddress instance when a User is created.
+    Only creates if the user doesn't already have a shipping address.
     """
     if created:
-        shipping_address = ShippingAddress(user=instance)
-        shipping_address.save()
+        # Check if user already has a shipping address to prevent duplicates
+        if not ShippingAddress.objects.filter(user=instance).exists():
+            shipping_address = ShippingAddress(user=instance)
+            shipping_address.save()
