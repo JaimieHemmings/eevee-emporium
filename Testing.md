@@ -171,3 +171,4 @@ Error 1 states:
 
 However I have opted to keep this as it provides notable performance improvements and caused no issues in testing.
 
+The other errors are relating to the use of a duplicate ID which was a short sighted implementation for the seperate mobile and desktop navigation menus but will need to be fixed in a future sprint.
