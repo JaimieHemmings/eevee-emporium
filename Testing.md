@@ -134,3 +134,26 @@ python manage.py test store
 ```
 
 This command discovers and runs all tests within the `store` app, providing a detailed report of the results. Passing these tests provides a high degree of confidence that the core functionalities of the store
+
+## Lighthouse page speed score
+
+### Overview
+
+Lighthouse is an automated web performance auditing tool developed by Google that analyzes web pages and provides detailed reports on performance, accessibility, best practices, and SEO. It measures key metrics such as:
+
+- **First Contentful Paint (FCP)**: Time until the first text or image is painted
+- **Largest Contentful Paint (LCP)**: Time until the largest content element is visible
+- **Cumulative Layout Shift (CLS)**: Measures visual stability during page load
+- **Speed Index**: How quickly content is visually displayed during page load
+- **Total Blocking Time (TBT)**: Time between FCP and Time to Interactive
+
+The tool provides actionable recommendations for improving site performance, which directly impacts user experience and search engine rankings. Regular Lighthouse testing helps identify performance bottlenecks and ensures the site meets modern web standards.
+
+### Performance Results
+
+While the desktop performance score is satisfactory, the mobile performance score presents challenges that require additional optimization research. Despite multiple attempts to improve the mobile score through various optimization techniques (image compression, code minification, caching strategies), the score remains below the ideal threshold. Further investigation into advanced performance optimization techniques, such as implementing service workers, critical CSS inlining, or exploring alternative hosting solutions, would be necessary to achieve better mobile performance metrics.
+
+[View the score](https://pagespeed.web.dev/analysis/https-eeveeemporium-a0b363641244-herokuapp-com/5xln2dauid?form_factor=desktop)
+
+![Page speed Mobile](/documentation/page-speed-mobile.jpg)
+![Page speed Desktop](/documentation/page-speed-desktop.jpg)
