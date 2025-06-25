@@ -153,10 +153,7 @@ Only users with admin privileges can modify or delete any data. All users can cr
 
 ## Wireframes
 
-- Homepage
-- About Page
-- Contact Page
-- Search Page
+![Wireframe for website](/documentation/wireframe-for-site.png)
 
 # Features
 
@@ -253,6 +250,31 @@ Throughout the development process, several challenges were encountered. Below i
 # Deployment and Local Development
 
 *Note*: My deployment has ```DEBUG = FALSE``` to prevent any security issues on the live deployed site. Best practice is to ensure your deployed version has the same setting in the Environment Configs.
+
+## SMTP Settings
+
+In order to allow your django deployment to send emails you will eed to update the values in the env for:
+
+- ```EMAIL_HOST_PASS```
+- ```EMAIL_HOST_USER```
+
+This project is set up to use GMAIL for the SMTP. Following these steps in order to get your own password:
+
+- Log in to Gmail
+- Click the cog in the top right
+- Click See all settings in the drop down menu
+- Go to the Accounts & Import tab
+- Click other Google Account Settings
+- Click "Security" in the left hand menu
+- Under "How you sign in to Google" Ensure 2-Step Verification is enabled
+- Return to the "Google Account Settings"
+- Use the search bar to search for "App Passwords"
+- Click on the suggested option of the same name
+- Name your new App Pasword using the input box provided
+- Click "Create"
+- Copy the password generated
+- Paste the password into the ```EMAIL_HOST_PASS``` value in the env
+- For the ```EMAIL_HOST_USER``` value use the email address of the account you used to generate the password
 
 ## AWS S3 Set up
 
