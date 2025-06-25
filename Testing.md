@@ -157,3 +157,17 @@ While the desktop performance score is satisfactory, the mobile performance scor
 
 ![Page speed Mobile](/documentation/page-speed-mobile.jpg)
 ![Page speed Desktop](/documentation/page-speed-desktop.jpg)
+
+## W3c CSS Validation
+
+[W3C Validation](https://eevee-emporium-static-files-2025.s3.amazonaws.com/css/style.css)
+
+Apart from vendor errors for extensions in the style.css file, the only other errors are for dynamic values which are not checked. The overwhelming majority of errors come from 3rd party scripts such as bootstrap and as such I will not be editing these.
+
+## W3c HTML Validation
+
+Error 1 states:
+```Bad value dns-prefetch-control for attribute http-equiv on element meta.```
+
+However I have opted to keep this as it provides notable performance improvements and caused no issues in testing.
+
