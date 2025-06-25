@@ -7,10 +7,7 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY", 'django-insecure-0%h8gn3k^k+r=mzmgf=l%+mtfh#1g6*6li25vo(&bwj9pf%+w=')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=True, cast=bool)
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-0%h8gn3k^k+r=mzmgf=l%+mtfh#1g6*6li25vo(&bwj9pf%+w=')
 
 DEBUG_STATE = config('DEBUG', default=True, cast=bool)
 
@@ -23,8 +20,8 @@ if DEBUG_STATE != True:
     EMAIL_USE_TLS = True
     EMAIL_PORT = 587
     EMAIL_HOST = 'smtp.gmail.com'
-    EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASS')
+    EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
+    EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASS', default='')
 
     # Default "from" email address
     DEFAULT_FROM_EMAIL = 'noreply@eeveeemporium.com'
@@ -181,9 +178,10 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-USE_AWS = os.environ.get("USE_AWS", "False").lower() in ("true", "1", "yes")
+USE_AWS = config('USE_AWS', default=False, cast=bool)
 
-if USE_AWS:
+# Only use S3 for static files if not in DEBUG mode and USE_AWS is True
+if USE_AWS and not DEBUG:
     print("Using S3")
 
     # cache control
@@ -192,10 +190,10 @@ if USE_AWS:
         "CacheControl": "max-age=94608000",
     }
 
-    AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME")
-    AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
-    AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME", "eu-west-1")
-    AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
+    AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+    AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+    AWS_S3_REGION_NAME = config('AWS_S3_REGION_NAME', default='eu-west-1')
+    AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
     AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
 
     STATICFILES_LOCATION = "static"
@@ -218,6 +216,11 @@ if USE_AWS:
     # Override static and media URLs in production
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/"
     MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/"
+else:
+    print("Using local static files")
+    # Use default Django static files handling for development
+    STATIC_URL = "/static/"
+    MEDIA_URL = "/media/"
 
 CSRF_TRUSTED_ORIGINS = [
     'https://eeveeemporium-a0b363641244.herokuapp.com',
@@ -226,9 +229,9 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 # Stripe settings
-STRIPE_PUBLIC_KEY = os.environ.get("STRIPE_PUBLIC_KEY")
-STRIPE_PRIVATE_KEY = os.environ.get("STRIPE_SECRET_KEY")
-STRIPE_WH_SECRET = os.environ.get("STRIPE_WH_SECRET")
+STRIPE_PUBLIC_KEY = config('STRIPE_PUBLIC_KEY', default='')
+STRIPE_PRIVATE_KEY = config('STRIPE_SECRET_KEY', default='')
+STRIPE_WH_SECRET = config('STRIPE_WH_SECRET', default='')
 
 # Cache configuration
 if DEBUG:
