@@ -1707,3 +1707,7 @@ p {
     font-size: 1.8rem;
   }
 }
+
+.billboard-cat-title {
+  background-color: #111;
+}
