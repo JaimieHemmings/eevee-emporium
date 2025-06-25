@@ -1,5 +1,6 @@
 {% load static %}
 
+<!-- Preload critical images (first 3 products) -->
 {% if products %}
   {% for product in products %}
     {% if forloop.counter <= 3 %}
