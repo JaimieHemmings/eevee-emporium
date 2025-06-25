@@ -30,10 +30,12 @@
             {% if products %}
             {% for product in products %}
             <div class="swiper-slide bg-light rounded-3 p-3">
-              <div class="billboard-cat-title">
-                <a href="/category/{{ product.category.slug }}" class="text-decoration-none">
-                    {{ product.category }}
-                </a>                
+              <div class="btn-left">
+                <div class="billboard-cat-title text-white">
+                  <a href="/category/{{ product.category.slug }}" class="text-decoration-none">
+                      {{ product.category }}
+                    </a>                
+                </div>
                 <div class="image-holder mt-3">
                   <a href="{% url 'product' product.slug %}" class="ratio ratio-1x1 d-block">
                     <img src="{{ product.image.url }}" 
